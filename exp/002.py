@@ -223,6 +223,18 @@ class FeedBackModel(nn.Module):
         return logits
 
 
+def get_scheduler(cfg, optimizer, num_train_steps):
+    if cfg.scheduler == 'linear':
+        scheduler = get_linear_schedule_with_warmup(
+            optimizer, num_warmup_steps=cfg.num_warmup_steps, num_training_steps=num_train_steps
+        )
+    elif cfg.scheduler == 'cosine':
+        scheduler = get_cosine_schedule_with_warmup(
+            optimizer, num_warmup_steps=cfg.num_warmup_steps, num_training_steps=num_train_steps, num_cycles=cfg.num_cycles
+        )
+    return scheduler
+
+
 def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, device, epoch, best_score, valid_labels):
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
