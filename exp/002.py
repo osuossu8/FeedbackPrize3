@@ -88,7 +88,7 @@ train = pd.read_csv('input/train_folds.csv')
 
 set_seed(CFG.seed)
 device = set_device()
-LOGGER = init_logger(log_file=f"{CFG.EXP_ID}.log")
+LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
 
 OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
 if not os.path.exists(OUTPUT_DIR):
