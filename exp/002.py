@@ -83,6 +83,9 @@ class CFG:
     tokenizer = AutoTokenizer.from_pretrained(model)
 
 
+train = pd.read_csv('input/train_folds.csv')
+
+
 set_seed(CFG.seed)
 device = set_device()
 LOGGER = init_logger(log_file=f"{CFG.EXP_ID}.log")
