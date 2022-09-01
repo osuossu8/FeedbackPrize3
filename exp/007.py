@@ -76,7 +76,7 @@ class CFG:
     train = True
     num_warmup_steps = 0
     num_cycles=0.5
-    debug = False # True
+    debug = False
     freezing = True
     gradient_checkpoint = True
     reinit_layers = 4 # 3
