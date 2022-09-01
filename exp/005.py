@@ -184,8 +184,8 @@ class FeedBackModel(nn.Module):
 
 
         # Freeze
-        ##if self.cfg.freezing:
-        ##    freeze(self.model.embeddings)
+        if self.cfg.freezing:
+            freeze(self.model.embeddings)
             # freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
