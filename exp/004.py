@@ -127,9 +127,9 @@ class FeedBackDataset(Dataset):
             token_type_ids = [1 for _ in range(self.max_len)]
 
         d = {
-            "input_ids": torch.tensor(input_ids, dtype=torch.long),
-            "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
-            "token_type_ids": torch.tensor(token_type_ids, dtype=torch.long),
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "token_type_ids": token_type_ids,
         }
         return d
 
