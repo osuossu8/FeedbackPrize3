@@ -66,9 +66,9 @@ class CFG:
     eval_freq = 780 # 390 # 170
     min_lr=1e-6
     scheduler = 'cosine'
-    batch_size = 8 # 2 # 4
+    batch_size = 4 # 8 # 2 # 4
     num_workers = 3
-    lr = 2e-5 # 5e-6 # 3e-6
+    lr = 5e-6 # 2e-5 # 5e-6 # 3e-6
     weigth_decay = 0.01
     max_grad_norm = 1000
     epochs = 4
@@ -115,11 +115,12 @@ class FeedBackDataset(Dataset):
             add_special_tokens=True,
             max_length = self.max_len
         )
+        
         return {
             'input_ids':inputs['input_ids'],
             'attention_mask':inputs['attention_mask'],
             'target':self.targets[index]
-            }
+        }
 
 
 class Collate:
@@ -149,7 +150,7 @@ class Collate:
         output["input_ids"] = torch.tensor(output["input_ids"], dtype=torch.long)
         output["attention_mask"] = torch.tensor(output["attention_mask"], dtype=torch.long)
         if self.isTrain:
-            output["target"] = torch.tensor(output["target"], dtype=torch.long)
+            output["target"] = torch.tensor(output["target"], dtype=torch.float)
 
         return output
 
@@ -183,8 +184,8 @@ class FeedBackModel(nn.Module):
 
 
         # Freeze
-        if self.cfg.freezing:
-            freeze(self.model.embeddings)
+        ##if self.cfg.freezing:
+        ##    freeze(self.model.embeddings)
             # freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
@@ -295,7 +296,7 @@ def valid_one_epoch(model, dataloader, device, epoch):
     for step, data in enumerate(dataloader):
         ids = data['input_ids'].to(device, dtype=torch.long)
         mask = data['attention_mask'].to(device, dtype=torch.long)
-        targets = data['target'].to(device, dtype=torch.long)
+        targets = data['target'].to(device, dtype=torch.float)
 
         batch_size = ids.size(0)
         outputs = model(ids, mask)
@@ -393,8 +394,26 @@ def train_loop(fold):
     return valid_data
 
 
+class RMSELoss(nn.Module):
+    def __init__(self, reduction='mean', eps=1e-9):
+        super().__init__()
+        self.mse = nn.MSELoss(reduction='none')
+        self.reduction = reduction
+        self.eps = eps
+
+    def forward(self, y_pred, y_true):
+        loss = torch.sqrt(self.mse(y_pred, y_true) + self.eps)
+        if self.reduction == 'none':
+            loss = loss
+        elif self.reduction == 'sum':
+            loss = loss.sum()
+        elif self.reduction == 'mean':
+            loss = loss.mean()
+        return loss
+
+
 def criterion(outputs, targets):
-    loss_fct = nn.MSELoss()
+    loss_fct = RMSELoss() # nn.MSELoss()
     loss = loss_fct(outputs, targets)
     return loss
 
