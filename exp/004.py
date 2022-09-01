@@ -141,7 +141,7 @@ class FeedBackDataset(Dataset):
         #    add_special_tokens=True,
         #    max_length = self.max_len
         #)
-        inputs = cut_head_and_tail(text)
+        inputs = self.cut_head_and_tail(text)
         return {
             'input_ids':inputs['input_ids'],
             'attention_mask':inputs['attention_mask'],
