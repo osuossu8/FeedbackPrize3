@@ -57,7 +57,7 @@ class CFG:
     model = 'roberta-large' # 'microsoft/deberta-v3-large'  # 'microsoft/deberta-v3-base'
     seed = 2022 # 42 # 71
     n_splits = 5
-    max_len = 1024 # 512
+    max_len = 512 # 1024 # 512
     dropout = 0
     targets = ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]
     target_size = len(targets)
@@ -182,8 +182,8 @@ class FeedBackModel(nn.Module):
 
 
         # Freeze
-        if self.cfg.freezing:
-            freeze(self.model.embeddings)
+        #if self.cfg.freezing:
+        #    freeze(self.model.embeddings)
             # freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
@@ -217,8 +217,7 @@ class FeedBackModel(nn.Module):
 
         # simple CLS
         sequence_output = transformer_out[0][:, 0, :]
-
-        logits = self.output(sequence_output)
+        logits = self.output(sequence_output) 
 
         return logits
 
