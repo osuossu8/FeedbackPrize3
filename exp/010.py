@@ -85,6 +85,20 @@ class CFG:
 
 train = pd.read_csv('input/train_folds.csv')
 
+d = {
+        1 : 1,
+        1.5 : 2,
+        2 : 3,
+        2.5 : 4,
+        3 : 5,
+        3.5 : 6,
+        4 : 7,
+        4.5 : 8,
+        5 : 9
+}
+
+#for t in ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]:
+#    train[t] = train[t].map(lambda x: d[x])
 
 set_seed(CFG.seed)
 device = set_device()
@@ -177,7 +191,7 @@ class FeedBackModel(nn.Module):
 
         self.output = nn.Sequential(
             nn.LayerNorm(self.config.hidden_size),
-            nn.Linear(self.config.hidden_size, self.cfg.target_size)
+            nn.Linear(self.config.hidden_size, 9) #self.cfg.target_size)
         )
 
 
@@ -218,9 +232,13 @@ class FeedBackModel(nn.Module):
         # simple CLS
         sequence_output = transformer_out[0][:, 0, :]
 
-        logits = self.output(sequence_output)
-
-        return logits
+        logits1 = self.output(sequence_output) # bs, 9
+        logits2 = self.output(sequence_output)
+        logits3 = self.output(sequence_output)
+        logits4 = self.output(sequence_output)
+        logits5 = self.output(sequence_output)
+        logits6 = self.output(sequence_output)
+        return torch.stack([logits1, logits2, logits3, logits4, logits5, logits6], 1) # bs, 6, 9
 
 
 def get_scheduler(cfg, optimizer, num_train_steps):
@@ -274,8 +292,9 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
 
         if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
             print('Epoch: [{0}][{1}/{2}] '
+                  'Loss: [{3}]'
                   'Elapsed {remain:s} '
-                  .format(epoch+1, step, len(dataloader),
+                  .format(epoch+1, step, len(dataloader), epoch_loss,
                           remain=timeSince(start, float(step+1)/len(dataloader))))
 
 
@@ -414,6 +433,7 @@ def train_loop(fold):
 
 class LDLLoss(nn.Module):
     """
+    https://developers.microad.co.jp/entry/2021/10/18/063000?amp=1
     Label Distribution Learning Loss
     """
 
@@ -441,7 +461,8 @@ class LDLLoss(nn.Module):
         Y = self.norm_dist(y)
         # Cross Entropy
         loss = -Y * torch.log(P + self.delta)
-        
+        # nan を 0 で埋める
+        loss = torch.nan_to_num(loss)
         return torch.mean(loss)
 
     def norm_dist(self, y: torch.tensor, sigma: float = 1.0) -> torch.tensor:
@@ -464,8 +485,15 @@ class LDLLoss(nn.Module):
 
 
 def criterion(outputs, targets):
-    loss_fct = LDLLoss(dist_size=6) # nn.MSELoss()
-    loss = loss_fct(outputs, targets)
+    #loss_fct = nn.MSELoss()
+    #loss = loss_fct(outputs, targets)
+    loss_fct = LDLLoss(dist_size=9)
+    loss = []
+    for i in range(CFG.target_size):
+        loss.append(
+                loss_fct(outputs[:, i, :], targets[:, i])
+        )
+    loss = torch.mean(torch.stack(loss), 0)
     return loss
 
 def get_score(outputs, targets):
