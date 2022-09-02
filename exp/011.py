@@ -63,7 +63,7 @@ class CFG:
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 780 # 390 # 170
+    eval_freq = 780 * 2 # 390 # 170
     min_lr=1e-6
     scheduler = 'cosine'
     batch_size = 1 # 2 # 4
@@ -274,10 +274,10 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
 
         if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
             print('Epoch: [{0}][{1}/{2}] '
+                  'Loss: [{3}]'
                   'Elapsed {remain:s} '
-                  .format(epoch+1, step, len(dataloader),
+                  .format(epoch+1, step, len(dataloader), epoch_loss,
                           remain=timeSince(start, float(step+1)/len(dataloader))))
-
 
         if (step > 0) & (step % CFG.eval_freq == 0) :
 
