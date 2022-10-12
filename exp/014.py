@@ -67,7 +67,7 @@ class CFG:
     min_lr=1e-6
     scheduler = 'cosine'
     batch_size = 1 # 2 # 4
-    num_workers = 3
+    num_workers = 0 #3
     lr = 5e-6 # 3e-6
     weigth_decay = 0.01
     epochs = 4
