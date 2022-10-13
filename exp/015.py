@@ -342,7 +342,7 @@ def valid_one_epoch(model, dataloader, device, epoch):
         batch_size = ids.size(0)
         outputs = model(ids, mask)
         loss = criterion(outputs, targets / 5.0)
-        output = torch.sigmoid(output) * 5.
+        outputs = torch.sigmoid(outputs) * 5.
         pred.append(outputs.to('cpu').numpy())
 
         running_loss += (loss.item()* batch_size)
