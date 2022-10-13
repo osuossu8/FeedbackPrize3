@@ -51,6 +51,22 @@ from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_wi
 from src.machine_learning_util import set_seed, set_device, init_logger, AverageMeter, to_pickle, unpickle, asMinutes, timeSince
 
 
+from iterstrat.ml_stratifiers import MultilabelStratifiedKFold
+
+
+def create_folds(data, num_splits):
+    data["kfold"] = -1
+
+    mskf = MultilabelStratifiedKFold(n_splits=num_splits, shuffle=True, random_state=42)
+    labels = ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]
+    data_labels = data[labels].values
+
+    for f, (t_, v_) in enumerate(mskf.split(data, data_labels)):
+        data.loc[v_, "kfold"] = f
+
+    return data
+
+
 class CFG:
     EXP_ID = '016'
     apex = True
@@ -83,8 +99,8 @@ class CFG:
     tokenizer = AutoTokenizer.from_pretrained(model)
 
 
-train = pd.read_csv('input/train_folds.csv')
-
+train = pd.read_csv('input/train.csv')
+train = create_folds(train, num_splits=CFG.n_fold)
 
 set_seed(CFG.seed)
 device = set_device()
