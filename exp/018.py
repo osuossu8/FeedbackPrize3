@@ -129,6 +129,7 @@ class FeedBackDataset(Dataset):
     def __len__(self):
         return len(self.df)
 
+    # staticmethod に書き換えたい
     def cut_head_and_tail(self, text):
         input_ids = self.tokenizer.encode(text)
         n_token = len(input_ids)
@@ -148,6 +149,9 @@ class FeedBackDataset(Dataset):
             input_ids = [0]+ _input_ids[:harf_len] + _input_ids[-harf_len:] + [2]
             attention_mask = [1 for _ in range(self.max_len)]
             token_type_ids = [1 for _ in range(self.max_len)]
+
+            if len(input_ids) == 1428:
+                input_ids = [0]+ _input_ids[:harf_len] + _input_ids[-(harf_len+1):] + [2]
 
         d = {
             "input_ids": input_ids,
