@@ -1,0 +1,50 @@
+-------------fold:0 training-------------
+Epoch 1 Step 782 - avg_train_loss: 0.7890  avg_val_loss: 0.2515
+Epoch 1 Step 782 - Score: 0.5009
+Epoch 1 Step 782 - Save Best Score: 0.5009 Model
+Epoch 1 - avg_train_loss: 0.5302  avg_val_loss: 0.2515  time: 928s
+Epoch 1 - Score: 0.5009
+Epoch 2 Step 782 - avg_train_loss: 0.2473  avg_val_loss: 0.2483
+Epoch 2 Step 782 - Score: 0.4972
+Epoch 2 Step 782 - Save Best Score: 0.4972 Model
+Epoch 2 - avg_train_loss: 0.2403  avg_val_loss: 0.2483  time: 934s
+Epoch 2 - Score: 0.4972
+Epoch 3 Step 782 - avg_train_loss: 0.2249  avg_val_loss: 0.2354
+Epoch 3 Step 782 - Score: 0.4834
+Epoch 3 Step 782 - Save Best Score: 0.4834 Model
+Epoch 3 - avg_train_loss: 0.2171  avg_val_loss: 0.2354  time: 932s
+Epoch 3 - Score: 0.4834
+Epoch 4 Step 782 - avg_train_loss: 0.1965  avg_val_loss: 0.2119
+Epoch 4 Step 782 - Score: 0.4596
+Epoch 4 Step 782 - Save Best Score: 0.4596 Model
+Epoch 4 - avg_train_loss: 0.1983  avg_val_loss: 0.2119  time: 933s
+Epoch 4 - Score: 0.4596
+========== fold: 0 result ==========
+Score: 0.4596
+-------------fold:1 training-------------
+Epoch 1 Step 782 - avg_train_loss: 0.7316  avg_val_loss: 0.3394
+Epoch 1 Step 782 - Score: 0.5787
+Epoch 1 Step 782 - Save Best Score: 0.5787 Model
+Epoch 1 - avg_train_loss: 0.5024  avg_val_loss: 0.3394  time: 933s
+Epoch 1 - Score: 0.5787
+Epoch 2 Step 782 - avg_train_loss: 0.2422  avg_val_loss: 0.2284
+Epoch 2 Step 782 - Score: 0.4771
+Epoch 2 Step 782 - Save Best Score: 0.4771 Model
+Epoch 2 - avg_train_loss: 0.2302  avg_val_loss: 0.2284  time: 937s
+Epoch 2 - Score: 0.4771
+Epoch 3 Step 782 - avg_train_loss: 0.2031  avg_val_loss: 0.2186
+Epoch 3 Step 782 - Score: 0.4668
+Epoch 3 Step 782 - Save Best Score: 0.4668 Model
+Epoch 3 - avg_train_loss: 0.2011  avg_val_loss: 0.2186  time: 935s
+Epoch 3 - Score: 0.4668
+Epoch 4 Step 782 - avg_train_loss: 0.1889  avg_val_loss: 0.2152
+Epoch 4 Step 782 - Score: 0.4632
+Epoch 4 Step 782 - Save Best Score: 0.4632 Model
+Epoch 4 - avg_train_loss: 0.1862  avg_val_loss: 0.2152  time: 937s
+Epoch 4 - Score: 0.4632
+========== fold: 1 result ==========
+Score: 0.4632
+-------------fold:2 training-------------
+Epoch 1 Step 782 - avg_train_loss: 0.7617  avg_val_loss: 0.2735
+Epoch 1 Step 782 - Score: 0.5218
+Epoch 1 Step 782 - Save Best Score: 0.5218 Model
