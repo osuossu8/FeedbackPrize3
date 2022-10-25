@@ -54,7 +54,7 @@ from src.machine_learning_util import set_seed, set_device, init_logger, Average
 class CFG:
     EXP_ID = '022'
     apex = True
-    model = 'microsoft/deberta-xlarge' # 'microsoft/deberta-v3-large'  # 'microsoft/deberta-v3-base'
+    model = 'microsoft/deberta-v3-base' # 'microsoft/deberta-xlarge' # 'allenai/longformer-base-4096' # 'microsoft/deberta-xlarge' # 'microsoft/deberta-v3-large'  # 'microsoft/deberta-v3-base'
     seed = 2022 # 42 # 71
     n_splits = 5
     max_len = 1536 # 1429 # 1024 # 512
@@ -63,10 +63,10 @@ class CFG:
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 780 * 2 # 390 # 170
+    eval_freq = 782 # 780 * 2 # 390 # 170
     min_lr=1e-6
     scheduler = 'cosine'
-    batch_size = 1 # 2 # 4
+    batch_size = 2 # 1 # 2 # 4
     num_workers = 0 #3
     lr = 5e-6 # 3e-6
     weigth_decay = 0.01
