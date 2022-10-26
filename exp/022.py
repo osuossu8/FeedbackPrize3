@@ -63,10 +63,10 @@ class CFG:
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 782 # 780 * 2 # 390 # 170
+    eval_freq = 780 * 2 # 782 # 780 * 2
     min_lr=1e-6
     scheduler = 'cosine'
-    batch_size = 2 # 1 # 2 # 4
+    batch_size = 1 # 1 # 2 # 4
     num_workers = 0 #3
     lr = 5e-6 # 3e-6
     weigth_decay = 0.01
@@ -323,7 +323,7 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
         end = time.time()
 
         if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
-            print('Epoch: [{0}][{1}/{2}] '
+            LOGGER.info('Epoch: [{0}][{1}/{2}] '
                   'Loss: [{3}]'
                   'Elapsed {remain:s} '
                   .format(epoch+1, step, len(dataloader), epoch_loss,
@@ -331,7 +331,7 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
 
         if (step > 0) & (step % CFG.eval_freq == 0) :
 
-            valid_epoch_loss, pred = valid_one_epoch(model, valid_loader, device, epoch)
+            valid_epoch_loss, pred = valid_one_epoch(model, valid_loader, device)
 
             score = get_score(pred, valid_labels)
 
@@ -353,7 +353,7 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
 
 
 @torch.no_grad()
-def valid_one_epoch(model, dataloader, device, epoch):
+def valid_one_epoch(model, dataloader, device):
     model.eval()
 
     dataset_size = 0
@@ -380,7 +380,7 @@ def valid_one_epoch(model, dataloader, device, epoch):
         end = time.time()
 
         if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
-            print('EVAL: [{0}/{1}] '
+            LOGGER.info('EVAL: [{0}/{1}] '
                   'Elapsed {remain:s} '
                   .format(step, len(dataloader),
                           remain=timeSince(start, float(step+1)/len(dataloader))))
