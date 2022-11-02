@@ -342,8 +342,12 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
                 best_score = score
                 LOGGER.info(f'Epoch {epoch+1} Step {step} - Save Best Score: {best_score:.4f} Model')
                 torch.save({'model': model.state_dict(),
-                            'predictions': pred},
+                            'predictions': pred,
+                            'embeddings': embs},
                             OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth")
+
+
+                LOGGER.info(embs.shape)
 
             model.train()
 
