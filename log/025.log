@@ -1,0 +1,200 @@
+-------------fold:0 training-------------
+Epoch 1 Step 1560 - avg_train_loss: 0.4687  avg_val_loss: 0.2147
+Epoch 1 Step 1560 - Score: 0.4630
+Epoch 1 Step 1560 - Save Best Score: 0.4630 Model
+(782, 1024)
+Epoch 1 Step 3120 - avg_train_loss: 0.3499  avg_val_loss: 0.2450
+Epoch 1 Step 3120 - Score: 0.4939
+interid embedding shape : (782, 1024)
+Epoch 1 - avg_train_loss: 0.3496  avg_val_loss: 0.2450  time: 4903s
+Epoch 1 - Score: 0.4939
+Epoch 2 Step 1560 - avg_train_loss: 0.2060  avg_val_loss: 0.2150
+Epoch 2 Step 1560 - Score: 0.4626
+Epoch 2 Step 1560 - Save Best Score: 0.4626 Model
+(782, 1024)
+Epoch 2 Step 3120 - avg_train_loss: 0.1981  avg_val_loss: 0.2069
+Epoch 2 Step 3120 - Score: 0.4542
+Epoch 2 Step 3120 - Save Best Score: 0.4542 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 2 - avg_train_loss: 0.1979  avg_val_loss: 0.2069  time: 4949s
+Epoch 2 - Score: 0.4542
+Epoch 3 Step 1560 - avg_train_loss: 0.1419  avg_val_loss: 0.2059
+Epoch 3 Step 1560 - Score: 0.4533
+Epoch 3 Step 1560 - Save Best Score: 0.4533 Model
+(782, 1024)
+Epoch 3 Step 3120 - avg_train_loss: 0.1362  avg_val_loss: 0.2047
+Epoch 3 Step 3120 - Score: 0.4519
+Epoch 3 Step 3120 - Save Best Score: 0.4519 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 3 - avg_train_loss: 0.1361  avg_val_loss: 0.2047  time: 4949s
+Epoch 3 - Score: 0.4519
+Epoch 4 Step 1560 - avg_train_loss: 0.0958  avg_val_loss: 0.2055
+Epoch 4 Step 1560 - Score: 0.4526
+Epoch 4 Step 3120 - avg_train_loss: 0.0956  avg_val_loss: 0.2029
+Epoch 4 Step 3120 - Score: 0.4498
+Epoch 4 Step 3120 - Save Best Score: 0.4498 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 4 - avg_train_loss: 0.0956  avg_val_loss: 0.2029  time: 4941s
+Epoch 4 - Score: 0.4498
+(782, 1024)
+========== fold: 0 result ==========
+Score: 0.4498
+-------------fold:1 training-------------
+Epoch 1 Step 1560 - avg_train_loss: 0.5845  avg_val_loss: 0.2426
+Epoch 1 Step 1560 - Score: 0.4917
+Epoch 1 Step 1560 - Save Best Score: 0.4917 Model
+(783, 1024)
+Epoch 1 Step 3120 - avg_train_loss: 0.4127  avg_val_loss: 0.2442
+Epoch 1 Step 3120 - Score: 0.4923
+interid embedding shape : (783, 1024)
+Epoch 1 - avg_train_loss: 0.4124  avg_val_loss: 0.2442  time: 4948s
+Epoch 1 - Score: 0.4923
+Epoch 2 Step 1560 - avg_train_loss: 0.2078  avg_val_loss: 0.2133
+Epoch 2 Step 1560 - Score: 0.4612
+Epoch 2 Step 1560 - Save Best Score: 0.4612 Model
+(783, 1024)
+Epoch 2 Step 3120 - avg_train_loss: 0.2022  avg_val_loss: 0.2092
+Epoch 2 Step 3120 - Score: 0.4569
+Epoch 2 Step 3120 - Save Best Score: 0.4569 Model
+(783, 1024)
+interid embedding shape : (783, 1024)
+Epoch 2 - avg_train_loss: 0.2022  avg_val_loss: 0.2092  time: 4963s
+Epoch 2 - Score: 0.4569
+Epoch 3 Step 1560 - avg_train_loss: 0.1522  avg_val_loss: 0.2157
+Epoch 3 Step 1560 - Score: 0.4638
+Epoch 3 Step 3120 - avg_train_loss: 0.1468  avg_val_loss: 0.2203
+Epoch 3 Step 3120 - Score: 0.4684
+interid embedding shape : (783, 1024)
+Epoch 3 - avg_train_loss: 0.1469  avg_val_loss: 0.2203  time: 4939s
+Epoch 3 - Score: 0.4684
+Epoch 4 Step 1560 - avg_train_loss: 0.1031  avg_val_loss: 0.2165
+Epoch 4 Step 1560 - Score: 0.4646
+Epoch 4 Step 3120 - avg_train_loss: 0.1009  avg_val_loss: 0.2159
+Epoch 4 Step 3120 - Score: 0.4639
+interid embedding shape : (783, 1024)
+Epoch 4 - avg_train_loss: 0.1009  avg_val_loss: 0.2159  time: 4934s
+Epoch 4 - Score: 0.4639
+(783, 1024)
+========== fold: 1 result ==========
+Score: 0.4569
+-------------fold:2 training-------------
+Epoch 1 Step 1560 - avg_train_loss: 0.4663  avg_val_loss: 0.2884
+Epoch 1 Step 1560 - Score: 0.5354
+Epoch 1 Step 1560 - Save Best Score: 0.5354 Model
+(782, 1024)
+Epoch 1 Step 3120 - avg_train_loss: 0.3467  avg_val_loss: 0.2238
+Epoch 1 Step 3120 - Score: 0.4728
+Epoch 1 Step 3120 - Save Best Score: 0.4728 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 1 - avg_train_loss: 0.3464  avg_val_loss: 0.2238  time: 4927s
+Epoch 1 - Score: 0.4728
+Epoch 2 Step 1560 - avg_train_loss: 0.2048  avg_val_loss: 0.2386
+Epoch 2 Step 1560 - Score: 0.4875
+Epoch 2 Step 3120 - avg_train_loss: 0.2019  avg_val_loss: 0.2119
+Epoch 2 Step 3120 - Score: 0.4595
+Epoch 2 Step 3120 - Save Best Score: 0.4595 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 2 - avg_train_loss: 0.2018  avg_val_loss: 0.2119  time: 4946s
+Epoch 2 - Score: 0.4595
+Epoch 3 Step 1560 - avg_train_loss: 0.1466  avg_val_loss: 0.2283
+Epoch 3 Step 1560 - Score: 0.4771
+Epoch 3 Step 3120 - avg_train_loss: 0.1422  avg_val_loss: 0.2114
+Epoch 3 Step 3120 - Score: 0.4592
+Epoch 3 Step 3120 - Save Best Score: 0.4592 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 3 - avg_train_loss: 0.1424  avg_val_loss: 0.2114  time: 4946s
+Epoch 3 - Score: 0.4592
+Epoch 4 Step 1560 - avg_train_loss: 0.0998  avg_val_loss: 0.2164
+Epoch 4 Step 1560 - Score: 0.4644
+Epoch 4 Step 3120 - avg_train_loss: 0.0983  avg_val_loss: 0.2161
+Epoch 4 Step 3120 - Score: 0.4642
+interid embedding shape : (782, 1024)
+Epoch 4 - avg_train_loss: 0.0983  avg_val_loss: 0.2161  time: 4927s
+Epoch 4 - Score: 0.4642
+(782, 1024)
+========== fold: 2 result ==========
+Score: 0.4592
+-------------fold:3 training-------------
+Epoch 1 Step 1560 - avg_train_loss: 0.4117  avg_val_loss: 0.2692
+Epoch 1 Step 1560 - Score: 0.5164
+Epoch 1 Step 1560 - Save Best Score: 0.5164 Model
+(782, 1024)
+Epoch 1 Step 3120 - avg_train_loss: 0.3260  avg_val_loss: 0.2203
+Epoch 1 Step 3120 - Score: 0.4690
+Epoch 1 Step 3120 - Save Best Score: 0.4690 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 1 - avg_train_loss: 0.3255  avg_val_loss: 0.2203  time: 4931s
+Epoch 1 - Score: 0.4690
+Epoch 2 Step 1560 - avg_train_loss: 0.1960  avg_val_loss: 0.2428
+Epoch 2 Step 1560 - Score: 0.4913
+Epoch 2 Step 3120 - avg_train_loss: 0.1940  avg_val_loss: 0.2108
+Epoch 2 Step 3120 - Score: 0.4586
+Epoch 2 Step 3120 - Save Best Score: 0.4586 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 2 - avg_train_loss: 0.1939  avg_val_loss: 0.2108  time: 4948s
+Epoch 2 - Score: 0.4586
+Epoch 3 Step 1560 - avg_train_loss: 0.1347  avg_val_loss: 0.2189
+Epoch 3 Step 1560 - Score: 0.4673
+Epoch 3 Step 3120 - avg_train_loss: 0.1323  avg_val_loss: 0.2126
+Epoch 3 Step 3120 - Score: 0.4605
+interid embedding shape : (782, 1024)
+Epoch 3 - avg_train_loss: 0.1322  avg_val_loss: 0.2126  time: 4951s
+Epoch 3 - Score: 0.4605
+Epoch 4 Step 1560 - avg_train_loss: 0.0956  avg_val_loss: 0.2121
+Epoch 4 Step 1560 - Score: 0.4600
+Epoch 4 Step 3120 - avg_train_loss: 0.0924  avg_val_loss: 0.2111
+Epoch 4 Step 3120 - Score: 0.4589
+interid embedding shape : (782, 1024)
+Epoch 4 - avg_train_loss: 0.0923  avg_val_loss: 0.2111  time: 4935s
+Epoch 4 - Score: 0.4589
+(782, 1024)
+========== fold: 3 result ==========
+Score: 0.4586
+-------------fold:4 training-------------
+Epoch 1 Step 1560 - avg_train_loss: 0.4822  avg_val_loss: 0.2910
+Epoch 1 Step 1560 - Score: 0.5385
+Epoch 1 Step 1560 - Save Best Score: 0.5385 Model
+(782, 1024)
+Epoch 1 Step 3120 - avg_train_loss: 0.3623  avg_val_loss: 0.2146
+Epoch 1 Step 3120 - Score: 0.4629
+Epoch 1 Step 3120 - Save Best Score: 0.4629 Model
+(782, 1024)
+interid embedding shape : (782, 1024)
+Epoch 1 - avg_train_loss: 0.3621  avg_val_loss: 0.2146  time: 4940s
+Epoch 1 - Score: 0.4629
+Epoch 2 Step 1560 - avg_train_loss: 0.1964  avg_val_loss: 0.2060
+Epoch 2 Step 1560 - Score: 0.4535
+Epoch 2 Step 1560 - Save Best Score: 0.4535 Model
+(782, 1024)
+Epoch 2 Step 3120 - avg_train_loss: 0.1980  avg_val_loss: 0.2285
+Epoch 2 Step 3120 - Score: 0.4761
+interid embedding shape : (782, 1024)
+Epoch 2 - avg_train_loss: 0.1981  avg_val_loss: 0.2285  time: 4940s
+Epoch 2 - Score: 0.4761
+Epoch 3 Step 1560 - avg_train_loss: 0.1419  avg_val_loss: 0.2073
+Epoch 3 Step 1560 - Score: 0.4547
+Epoch 3 Step 3120 - avg_train_loss: 0.1374  avg_val_loss: 0.2093
+Epoch 3 Step 3120 - Score: 0.4571
+interid embedding shape : (782, 1024)
+Epoch 3 - avg_train_loss: 0.1373  avg_val_loss: 0.2093  time: 4932s
+Epoch 3 - Score: 0.4571
+Epoch 4 Step 1560 - avg_train_loss: 0.0914  avg_val_loss: 0.2090
+Epoch 4 Step 1560 - Score: 0.4566
+Epoch 4 Step 3120 - avg_train_loss: 0.0925  avg_val_loss: 0.2071
+Epoch 4 Step 3120 - Score: 0.4546
+interid embedding shape : (782, 1024)
+Epoch 4 - avg_train_loss: 0.0925  avg_val_loss: 0.2071  time: 4926s
+Epoch 4 - Score: 0.4546
+(782, 1024)
+========== fold: 4 result ==========
+Score: 0.4535
+========== CV ==========
+Score: 0.4557
