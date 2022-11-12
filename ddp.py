@@ -1,5 +1,15 @@
 import os
 import time
+import warnings
+warnings.filterwarnings("ignore")
+
+
+import numpy as np
+import pandas as pd
+from tqdm.auto import tqdm
+from sklearn import metrics
+from sklearn.metrics import mean_squared_error
+
 
 import torch
 import torch.distributed as dist
@@ -24,6 +34,10 @@ class CFG:
     train = True
     n_gpu = 2
     n_accumulate=1
+    seed = 2022
+    n_splits = 5
+    targets = ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]
+    target_size = len(targets)
     scheduler = 'cosine'
     batch_size = 30 # 1
     num_workers = 0
@@ -83,6 +97,20 @@ def criterion(outputs, targets):
     return loss
 
 
+def get_score(outputs, targets):
+    mcrmse = []
+    for i in range(CFG.target_size):
+        mcrmse.append(
+            metrics.mean_squared_error(
+                targets[:, i],
+                outputs[:, i],
+                squared=False,
+            ),
+        )
+    mcrmse = np.mean(mcrmse)
+    return mcrmse
+
+
 def get_scheduler(cfg, optimizer, num_train_steps):
     if cfg.scheduler == 'linear':
         scheduler = get_linear_schedule_with_warmup(
@@ -95,7 +123,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, train_dataset, return_list):
+def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list):
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
     model = model.to(rank)
@@ -144,30 +172,88 @@ def train_one_epoch(rank, model, optimizer, train_dataset, return_list):
     else:
         loss_avg = None
  
-    return_list.append(loss_avg)
+    train_return_list.append(loss_avg)
+
+
+@torch.no_grad()
+def valid_one_epoch(rank, model, valid_dataset, valid_return_list):
+    torch.cuda.set_device(rank)
+    dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
+    model = model.to(rank)
+    model = DDP(model, device_ids=[rank])
+
+    sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False)
+    valid_loader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=sampler)
+
+    model.eval()
+    losses = AverageMeter()
+
+    start = end = time.time()
+    preds = []
+  
+    for step, (data, labels) in enumerate(valid_loader):
+        inputs = data.to(rank)
+        labels = labels.to(rank)
+
+        batch_size = inputs.size(0)
+
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+
+        losses.update(loss.item(), batch_size)
+        preds.append(outputs.detach()) # keep preds on GPU
+
+        end = time.time()
+
+    predictions = torch.cat(preds)
+
+    loss_avg = torch.tensor([losses.avg], device=rank)
+    loss_avg = my_gather(loss_avg, rank, CFG.n_gpu)
+    predictions = my_gather(predictions, rank, CFG.n_gpu)
+ 
+    if rank == 0:
+        loss_avg = torch.cat(loss_avg).mean().item()
+        predictions = torch.stack(predictions)
+        _, _, t = predictions.shape
+        predictions = predictions.transpose(0, 1).reshape(-1, t) 
+        # DistributedSampler pads the dataset to get a multiple of world size
+        predictions = predictions[:len(valid_dataset)]
+        predictions = predictions.cpu().numpy()
+        valid_return_list.append([loss_avg, predictions])
+    else:
+        valid_return_list.append([None, None])
 
 
 def main():
     manager = mp.Manager()
-    return_list = manager.list()
+    train_return_list = manager.list()
+    valid_return_list = manager.list()
 
     input_size = 5
     output_size = 2
     data_size = 100
     train_data = RandomDataset(input_size, output_size, data_size)
-    os.environ['MASTER_ADDR'] = 'localhost'
-    os.environ['MASTER_PORT'] = '12355'
+    valid_data = RandomDataset(input_size, output_size, data_size)
 
     model = Model(input_size, output_size)
     optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
 
     mp.spawn(train_one_epoch,
-        args=(model, optimizer, train_data, return_list),
+        args=(model, optimizer, train_data, train_return_list),
         nprocs=CFG.n_gpu,
         join=True)
 
-    print(return_list)
+    mp.spawn(valid_one_epoch,
+        args=(model, train_data, valid_return_list),
+        nprocs=CFG.n_gpu,
+        join=True)
+
+    print(train_return_list)
+    print(valid_return_list)
 
 
 if __name__=="__main__":
+    os.environ['MASTER_ADDR'] = 'localhost'
+    os.environ['MASTER_PORT'] = '12355'
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
     main()
