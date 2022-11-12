@@ -36,8 +36,6 @@ from torch.utils.data.distributed import DistributedSampler
 
 import tokenizers
 import transformers
-print(f"tokenizers.__version__: {tokenizers.__version__}")
-print(f"transformers.__version__: {transformers.__version__}")
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
 
@@ -50,7 +48,6 @@ class CFG:
     apex = True
     train = True
     debug = False
-    sync_bn = True
     n_gpu = 2
     seed = 2022
     model = 'microsoft/deberta-v3-large'
@@ -89,6 +86,27 @@ def add_token_preprocess(row):
     res.append("[END]")
 
     return ' '.join(res)
+
+
+train = pd.read_csv('input/train_folds.csv')
+CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
+CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
+CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
+
+train['full_text'] = train['full_text'].map(add_token_preprocess)
+
+if CFG.debug:
+    train = train.sample(n=128)
+    CFG.print_freq = 16
+    CFG.eval_freq = 64
+    CFG.epochs = 1
+
+set_seed(CFG.seed)
+LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
+
+OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
 
 
 class FeedBackDataset(Dataset):
@@ -174,6 +192,9 @@ class Collate:
             output["target"] = torch.tensor(output["target"], dtype=torch.float)
 
         return output
+
+
+collate_fn = Collate(CFG.tokenizer, isTrain=True)
 
 
 def freeze(module):
@@ -276,7 +297,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_loader, epoch, best_score, valid_label):
+def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_loader, epoch, fold, best_score, valid_labels):
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
 
@@ -314,15 +335,16 @@ def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_loader,
         end = time.time()
 
         if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
-            LOGGER.info('Epoch: [{0}][{1}/{2}] '
+            LOGGER.info('Fold: [{0}] '
+                        'Epoch: [{1}][{2}/{3}] '
                         'Elapsed {remain:s} '
-                        .format(epoch+1, step, len(dataloader),
+                        .format(fold, epoch+1, step, len(dataloader),
                                 remain=timeSince(start, float(step+1)/len(dataloader)),
                                 ))
 
         if (step > 0) & (step % CFG.eval_freq == 0) :
 
-            valid_epoch_loss, pred = valid_one_epoch(rank, model, valid_loader, epoch)
+            valid_epoch_loss, pred = valid_one_epoch(rank, model, valid_loader, epoch, fold)
 
             score = get_score(pred, valid_labels)
 
@@ -344,7 +366,7 @@ def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_loader,
 
 
 @torch.no_grad()
-def valid_one_epoch(rank, model, dataloader, epoch):
+def valid_one_epoch(rank, model, dataloader, epoch, fold):
     model.eval()
 
     dataset_size = 0
@@ -355,9 +377,9 @@ def valid_one_epoch(rank, model, dataloader, epoch):
     embs = []
 
     for step, data in enumerate(dataloader):
-        ids = data['input_ids'].to(device, dtype=torch.long)
-        mask = data['attention_mask'].to(device, dtype=torch.long)
-        targets = data['target'].to(device, dtype=torch.float)
+        ids = data['input_ids'].to(rank, dtype=torch.long)
+        mask = data['attention_mask'].to(rank, dtype=torch.long)
+        targets = data['target'].to(rank, dtype=torch.float)
 
         batch_size = ids.size(0)
         outputs = model(ids, mask)
@@ -372,9 +394,10 @@ def valid_one_epoch(rank, model, dataloader, epoch):
         end = time.time()
 
         if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
-            LOGGER.info('EVAL: [{0}/{1}] '
+            LOGGER.info('Fold: [{0}] '
+                        'EVAL: [{1}/{2}] '
                         'Elapsed {remain:s} '
-                        .format(step, len(dataloader),
+                        .format(fold, step, len(dataloader),
                                 remain=timeSince(start, float(step+1)/len(dataloader)),
                                 ))
 
@@ -382,7 +405,7 @@ def valid_one_epoch(rank, model, dataloader, epoch):
     return epoch_loss, pred
 
 
-def train_loop(fold):
+def train_loop(rank, fold):
     LOGGER.info(f'-------------fold:{fold} training-------------')
 
     train_data = train[train.kfold != fold].reset_index(drop=True)
@@ -410,8 +433,8 @@ def train_loop(fold):
 
     model = FeedBackModel(CFG.model)
     torch.save(model.config, OUTPUT_DIR+'config.pth')
-    model.to(device)
-    optimizer = AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
+    model.to(rank)
+    optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
     num_train_steps = int(len(train_data) / CFG.batch_size * CFG.epochs)
     scheduler = get_scheduler(CFG, optimizer, num_train_steps)
 
@@ -422,7 +445,7 @@ def train_loop(fold):
 
         start_time = time.time()
 
-        train_epoch_loss, valid_epoch_loss, pred, best_score = train_one_epoch(rank, model, optimizer, scheduler, train_loader, valid_loader, epoch, best_score, valid_labels)
+        train_epoch_loss, valid_epoch_loss, pred, best_score = train_one_epoch(rank, model, optimizer, scheduler, train_loader, valid_loader, epoch, fold, best_score, valid_labels)
 
         score = get_score(pred, valid_labels)
 
@@ -460,7 +483,7 @@ def get_result(oof_df):
     LOGGER.info(f'Score: {score:<.4f}')
 
 
-def main(rank, return_dict):
+def main(rank, return_dict, dummy):
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
 
@@ -486,40 +509,25 @@ if __name__=="__main__":
     os.environ['MASTER_PORT'] = '12355'
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-    train = pd.read_csv('input/train_folds.csv')
-    CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
-    CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
-    CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
-
-    train['full_text'] = train['full_text'].map(add_token_preprocess)
-
-    set_seed(CFG.seed)
-    device = set_device()
-    LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
-
-    OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
-
-    collate_fn = Collate(CFG.tokenizer, isTrain=True)
-
     manager = mp.Manager()
     return_dict = manager.dict()
 
-    processes = []
-    for rank in range(CFG.n_gpu):
-        p = mp.Process(target=main, args=(rank, return_dict))
-        p.start()
-        processes.append(p)
-    for p in processes:
-        p.join()
+    dummy = 0
 
-    LOGGER.info(return_dict.items())
+    mp.spawn(main,
+        args=(return_dict, dummy),
+        nprocs=CFG.n_gpu,
+        join=True)
 
-    # concat return dict
-    #oof_df = oof_df.reset_index(drop=True)
-    #LOGGER.info(f"========== CV ==========")
-    #get_result(oof_df)
-    #oof_df.to_csv(OUTPUT_DIR+f'oof_df.csv', index=False)
+    oof_df = pd.DataFrame()
+    for fold, _oof_df in return_dict.items():
+        oof_df = pd.concat([oof_df, _oof_df])
+        LOGGER.info(f"========== fold: {fold} result ==========")
+        get_result(_oof_df)
+
+    oof_df = oof_df.reset_index(drop=True)
+    LOGGER.info(f"========== CV ==========")
+    get_result(oof_df)
+    oof_df.to_csv(OUTPUT_DIR+f'oof_df.csv', index=False)
 
 
