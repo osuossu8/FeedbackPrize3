@@ -276,7 +276,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_loader, epoch, best_score, valid_label)
+def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_loader, epoch, best_score, valid_label):
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
 
