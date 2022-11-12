@@ -61,11 +61,12 @@ class CFG:
     print_freq = 100
     eval_freq = 780 * 2
     scheduler = 'cosine'
-    batch_size = 30 # 1
+    batch_size = 1
     num_workers = 0
     lr = 5e-6
     weigth_decay = 0.01
     min_lr=1e-6
+    num_warmup_steps = 0
     num_cycles=0.5
     epochs = 4
     n_fold = 5
@@ -148,54 +149,24 @@ class FeedBackDataset(Dataset):
                 input_ids = [0]+ _input_ids[:harf_len] + _input_ids[-(harf_len+diff):] + [2]
 
         d = {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-            "token_type_ids": token_type_ids,
+            "input_ids": torch.tensor(input_ids, dtype=torch.long),
+            "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
+            "token_type_ids": torch.tensor(token_type_ids, dtype=torch.long),
         }
         return d
 
     def __getitem__(self, index):
         text = self.text[index]
         inputs = self.cut_head_and_tail(text)
-        return {
-            'input_ids':inputs['input_ids'],
-            'attention_mask':inputs['attention_mask'],
-            'target':self.targets[index]
-            }
+        labels = torch.tensor(self.targets[index], dtype=torch.float)
+        return inputs, labels
 
 
-class Collate:
-    def __init__(self, tokenizer, isTrain=True):
-        self.tokenizer = tokenizer
-        self.isTrain = isTrain
-
-    def __call__(self, batch):
-        output = dict()
-        output["input_ids"] = [sample["input_ids"] for sample in batch]
-        output["attention_mask"] = [sample["attention_mask"] for sample in batch]
-        if self.isTrain:
-            output["target"] = [sample["target"] for sample in batch]
-
-        # calculate max token length of this batch
-        batch_max = max([len(ids) for ids in output["input_ids"]])
-
-        # add padding
-        if self.tokenizer.padding_side == "right":
-            output["input_ids"] = [s + (batch_max - len(s)) * [self.tokenizer.pad_token_id] for s in output["input_ids"]]
-            output["attention_mask"] = [s + (batch_max - len(s)) * [0] for s in output["attention_mask"]]
-        else:
-            output["input_ids"] = [(batch_max - len(s)) * [self.tokenizer.pad_token_id] + s for s in output["input_ids"]]
-            output["attention_mask"] = [(batch_max - len(s)) * [0] + s for s in output["attention_mask"]]
-
-        # convert to tensors
-        output["input_ids"] = torch.tensor(output["input_ids"], dtype=torch.long)
-        output["attention_mask"] = torch.tensor(output["attention_mask"], dtype=torch.long)
-        if self.isTrain:
-            output["target"] = torch.tensor(output["target"], dtype=torch.float)
-
-        return output
-
-collate_fn = Collate(CFG.tokenizer, isTrain=True)
+def collate(inputs):
+    mask_len = int(inputs["attention_mask"].sum(axis=1).max())
+    for k, v in inputs.items():
+        inputs[k] = inputs[k][:,:mask_len]
+    return inputs
 
 
 def freeze(module):
@@ -310,7 +281,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list):
+def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list, epoch):
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
     model = model.to(rank)
@@ -319,8 +290,8 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list):
     num_train_steps = int(len(train_dataset) / CFG.batch_size * CFG.epochs)
     scheduler = get_scheduler(CFG, optimizer, num_train_steps)
 
-    sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True)
-    train_loader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=sampler)
+    sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True, seed=CFG.seed, drop_last=True,)
+    dataloader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=sampler)
 
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
@@ -328,15 +299,17 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list):
 
     start = end = time.time()
 
-    for step, (data, labels) in enumerate(train_loader):
-        inputs = data.to(rank)
-        labels = labels.to(rank)
+    for step, (data, targets) in enumerate(dataloader):
+        data = collate(data)
+        ids = data['input_ids'].to(rank, dtype=torch.long)
+        mask = data['attention_mask'].to(rank, dtype=torch.long)
+        targets = targets.to(rank, dtype=torch.float)
 
-        batch_size = inputs.size(0)
+        batch_size = ids.size(0)
  
         with autocast(enabled=CFG.apex):
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
+            outputs = model(ids, mask)
+            loss = criterion(outputs, targets)
 
         loss = loss / CFG.n_accumulate
         losses.update(loss.item(), batch_size)
@@ -351,6 +324,15 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list):
 
         end = time.time()
 
+        if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
+            LOGGER.info('Epoch: [{0}][{1}/{2}] '
+                        'Elapsed {remain:s} '
+                        'Loss: {loss.val:.4f}({loss.avg:.4f}) '
+                        .format(epoch+1, step, len(dataloader),
+                                remain=timeSince(start, float(step+1)/len(dataloader)),
+                                loss=losses,
+                                ))
+
     loss_avg = torch.tensor([losses.avg], device=rank)
     loss_avg = my_gather(loss_avg, rank, CFG.n_gpu)
 
@@ -363,34 +345,44 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list):
 
 
 @torch.no_grad()
-def valid_one_epoch(rank, model, valid_dataset, valid_return_list):
+def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
     model = model.to(rank)
     model = DDP(model, device_ids=[rank])
 
-    sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False)
-    valid_loader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=sampler)
+    sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False, seed=CFG.seed, drop_last=True,)
+    dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=sampler)
 
     model.eval()
     losses = AverageMeter()
 
     start = end = time.time()
     preds = []
-  
-    for step, (data, labels) in enumerate(valid_loader):
-        inputs = data.to(rank)
-        labels = labels.to(rank)
 
-        batch_size = inputs.size(0)
+    for step, data in enumerate(dataloader):
+        data = collate(data)
+        ids = data['input_ids'].to(rank, dtype=torch.long)
+        mask = data['attention_mask'].to(rank, dtype=torch.long)
+        targets = targets.to(rank, dtype=torch.float)
 
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
+        batch_size = ids.size(0)
+        outputs, embedding_outputs = model(ids, mask)
+        loss = criterion(outputs, targets)
 
         losses.update(loss.item(), batch_size)
         preds.append(outputs.detach()) # keep preds on GPU
 
         end = time.time()
+
+        if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
+            LOGGER.info('EVAL: [{0}/{1}] '
+                        'Elapsed {remain:s} '
+                        'Loss: {loss.val:.4f}({loss.avg:.4f}) '
+                        .format(step, len(dataloader),
+                                remain=timeSince(start, float(step+1)/len(dataloader)),
+                                loss=losses,
+                                ))
 
     predictions = torch.cat(preds)
 
@@ -430,18 +422,20 @@ def main(fold):
 
     optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
 
+    epoch = 0
+
     mp.spawn(train_one_epoch,
-        args=(model, optimizer, trainDataset, train_return_list),
+        args=(model, optimizer, trainDataset, train_return_list, epoch),
         nprocs=CFG.n_gpu,
         join=True)
 
     mp.spawn(valid_one_epoch,
-        args=(model, validDataset, valid_return_list),
+        args=(model, validDataset, valid_return_list, epoch),
         nprocs=CFG.n_gpu,
         join=True)
 
-    print(train_return_list)
-    print(valid_return_list)
+    LOGGER.info(train_return_list)
+    LOGGER.info(valid_return_list)
 
 
 if __name__=="__main__":
