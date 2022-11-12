@@ -12,14 +12,29 @@ from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.distributed import DistributedSampler
 
 
+from transformers import AutoTokenizer, AutoModel, AutoConfig
+from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
+
+
 from src.machine_learning_util import set_seed, set_device, init_logger, AverageMeter, to_pickle, unpickle, asMinutes, timeSince
 
 
 class CFG:
     apex = True
+    train = True
+    n_gpu = 2
     n_accumulate=1
+    scheduler = 'cosine'
+    batch_size = 30 # 1
+    num_workers = 0
     lr = 5e-6
+    min_lr=1e-6
     weigth_decay = 0.01
+    num_warmup_steps = 0
+    num_cycles=0.5
+    epochs = 4
+    n_fold = 5
+    trn_fold = [i for i in range(n_fold)]
 
 
 class RandomDataset(Dataset):
@@ -62,18 +77,35 @@ def my_gather(output, local_rank, world_size):
     return result
 
 
-def train_one_epoch(rank, n_gpu, input_size, output_size, batch_size, train_dataset):
+def criterion(outputs, targets):
+    loss_fct = nn.MSELoss()
+    loss = loss_fct(outputs, targets)
+    return loss
+
+
+def get_scheduler(cfg, optimizer, num_train_steps):
+    if cfg.scheduler == 'linear':
+        scheduler = get_linear_schedule_with_warmup(
+            optimizer, num_warmup_steps=cfg.num_warmup_steps, num_training_steps=num_train_steps
+        )
+    elif cfg.scheduler == 'cosine':
+        scheduler = get_cosine_schedule_with_warmup(
+            optimizer, num_warmup_steps=cfg.num_warmup_steps, num_training_steps=num_train_steps, num_cycles=cfg.num_cycles
+        )
+    return scheduler
+
+
+def train_one_epoch(rank, model, optimizer, train_dataset, return_list):
     torch.cuda.set_device(rank)
-    dist.init_process_group("nccl", rank=rank, world_size=n_gpu)
-    # create local model
-    model = Model(input_size, output_size).to(rank)
-    # construct DDP model
+    dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
+    model = model.to(rank)
     model = DDP(model, device_ids=[rank])
-    # define loss function and optimizer
-    criterion = nn.MSELoss()
-    optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
-    sampler = DistributedSampler(train_dataset, num_replicas=n_gpu, rank=rank, shuffle=True)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=sampler)
+
+    num_train_steps = int(len(train_dataset) / CFG.batch_size * CFG.epochs)
+    scheduler = get_scheduler(CFG, optimizer, num_train_steps)
+
+    sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=sampler)
 
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
@@ -85,6 +117,8 @@ def train_one_epoch(rank, n_gpu, input_size, output_size, batch_size, train_data
         inputs = data.to(rank)
         labels = labels.to(rank)
 
+        batch_size = inputs.size(0)
+ 
         with autocast(enabled=CFG.apex):
             outputs = model(inputs)
             loss = criterion(outputs, labels)
@@ -97,42 +131,43 @@ def train_one_epoch(rank, n_gpu, input_size, output_size, batch_size, train_data
             scaler.step(optimizer)
             scaler.update()
             optimizer.zero_grad()
+            if scheduler is not None:
+                scheduler.step()
 
         end = time.time()
 
     loss_avg = torch.tensor([losses.avg], device=rank)
-    print(loss_avg)
-    loss_avg = my_gather(loss_avg, rank, n_gpu)
+    loss_avg = my_gather(loss_avg, rank, CFG.n_gpu)
 
     if rank == 0:
         loss_avg = torch.cat(loss_avg).mean().item()
     else:
         loss_avg = None
  
-    print(loss_avg)
-    return loss_avg
+    return_list.append(loss_avg)
 
 
 def main():
-    n_gpu = 2
+    manager = mp.Manager()
+    return_list = manager.list()
+
     input_size = 5
     output_size = 2
-    batch_size = 30
     data_size = 100
-    dataset = RandomDataset(input_size, output_size, data_size)
+    train_data = RandomDataset(input_size, output_size, data_size)
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = '12355'
+
+    model = Model(input_size, output_size)
+    optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
+
     mp.spawn(train_one_epoch,
-        args=(n_gpu, input_size, output_size, batch_size, dataset),
-        nprocs=n_gpu,
+        args=(model, optimizer, train_data, return_list),
+        nprocs=CFG.n_gpu,
         join=True)
 
+    print(return_list)
 
 
 if __name__=="__main__":
-    # Environment variables which need to be
-    # set when using c10d's default "env"
-    # initialization mode.
-    #os.environ["MASTER_ADDR"] = "localhost"
-    #os.environ["MASTER_PORT"] = "29500"
     main()
