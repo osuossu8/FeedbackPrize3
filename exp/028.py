@@ -50,6 +50,7 @@ class CFG:
     apex = True
     train = True
     debug = False
+    sync_bn = True
     n_gpu = 2
     seed = 2022
     model = 'microsoft/deberta-v3-large'
@@ -291,7 +292,7 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list, ep
     scheduler = get_scheduler(CFG, optimizer, num_train_steps)
 
     sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True, seed=CFG.seed, drop_last=True,)
-    dataloader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=sampler)
+    dataloader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=sampler, pin_memory=True, drop_last=True)
 
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
@@ -352,7 +353,7 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
     model = DDP(model, device_ids=[rank])
 
     sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False, seed=CFG.seed, drop_last=True,)
-    dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=sampler)
+    dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=sampler, pin_memory=True, drop_last=False)
 
     model.eval()
     losses = AverageMeter()
@@ -419,6 +420,10 @@ def main(fold):
 
     model = FeedBackModel(CFG.model)
     torch.save(model.config, OUTPUT_DIR+'config.pth')
+
+    # wrap for DDP
+    if CFG.sync_bn:
+        model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
     optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
 
