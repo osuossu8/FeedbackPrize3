@@ -60,7 +60,7 @@ class CFG:
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 780 * 2
+    eval_freq = 780 # * 2
     scheduler = 'cosine'
     batch_size = 1
     num_workers = 0
@@ -325,14 +325,15 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list, ep
 
         end = time.time()
 
-        if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
-            LOGGER.info('Epoch: [{0}][{1}/{2}] '
-                        'Elapsed {remain:s} '
-                        'Loss: {loss.val:.4f}({loss.avg:.4f}) '
-                        .format(epoch+1, step, len(dataloader),
-                                remain=timeSince(start, float(step+1)/len(dataloader)),
-                                loss=losses,
-                                ))
+        if rank == 0:
+            if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
+                LOGGER.info('Epoch: [{0}][{1}/{2}] '
+                            'Elapsed {remain:s} '
+                            'Loss: {loss.val:.4f}({loss.avg:.4f}) '
+                            .format(epoch+1, step, len(dataloader),
+                                    remain=timeSince(start, float(step+1)/len(dataloader)),
+                                    loss=losses,
+                                    ))
 
     loss_avg = torch.tensor([losses.avg], device=rank)
     loss_avg = my_gather(loss_avg, rank, CFG.n_gpu)
@@ -376,14 +377,15 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
 
         end = time.time()
 
-        if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
-            LOGGER.info('EVAL: [{0}/{1}] '
-                        'Elapsed {remain:s} '
-                        'Loss: {loss.val:.4f}({loss.avg:.4f}) '
-                        .format(step, len(dataloader),
-                                remain=timeSince(start, float(step+1)/len(dataloader)),
-                                loss=losses,
-                                ))
+        if rank == 0:
+            if step % CFG.print_freq == 0 or step == (len(dataloader)-1):
+                LOGGER.info('EVAL: [{0}/{1}] '
+                            'Elapsed {remain:s} '
+                            'Loss: {loss.val:.4f}({loss.avg:.4f}) '
+                            .format(step, len(dataloader),
+                                    remain=timeSince(start, float(step+1)/len(dataloader)),
+                                    loss=losses,
+                                    ))
 
     predictions = torch.cat(preds)
 
