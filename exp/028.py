@@ -36,8 +36,6 @@ from torch.utils.data.distributed import DistributedSampler
 
 import tokenizers
 import transformers
-print(f"tokenizers.__version__: {tokenizers.__version__}")
-print(f"transformers.__version__: {transformers.__version__}")
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
 
@@ -394,6 +392,9 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
 
 
 def main(fold):
+    set_seed(CFG.seed)
+    setup_tokenizer(CFG)
+
     manager = mp.Manager()
     train_return_list = manager.list()
     valid_return_list = manager.list()
@@ -439,10 +440,6 @@ if __name__=="__main__":
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = '12355'
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-    set_seed(CFG.seed)
-
-    setup_tokenizer(CFG)
 
     OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
     if not os.path.exists(OUTPUT_DIR):
