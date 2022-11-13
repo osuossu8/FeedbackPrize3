@@ -362,7 +362,7 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
     start = end = time.time()
     preds = []
 
-    for step, data in enumerate(dataloader):
+    for step, (data, targets) in enumerate(dataloader):
         data = collate(data)
         ids = data['input_ids'].to(rank, dtype=torch.long)
         mask = data['attention_mask'].to(rank, dtype=torch.long)
