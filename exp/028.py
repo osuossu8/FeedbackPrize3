@@ -78,6 +78,15 @@ class CFG:
     tokenizer = AutoTokenizer.from_pretrained(model)
 
 
+LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
+
+
+def setup_tokenizer(CFG):
+    CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
+    CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
+    CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
+
+
 def add_token_preprocess(row):
     res = ["[START]"]
     for sentence in row.split('\n'):
@@ -89,28 +98,6 @@ def add_token_preprocess(row):
     res.append("[END]")
 
     return ' '.join(res)
-
-
-train = pd.read_csv('input/train_folds.csv')
-print(CFG.tokenizer.decode(CFG.tokenizer.encode(train['full_text'].at[0])))
-print()
-
-CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
-CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
-CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
-
-
-train['full_text'] = train['full_text'].map(add_token_preprocess)
-print(CFG.tokenizer.decode(CFG.tokenizer.encode(train['full_text'].at[0])))
-print()
-
-set_seed(CFG.seed)
-device = set_device()
-LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
-
-OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
 
 
 class FeedBackDataset(Dataset):
@@ -369,7 +356,7 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
         targets = targets.to(rank, dtype=torch.float)
 
         batch_size = ids.size(0)
-        outputs, embedding_outputs = model(ids, mask)
+        outputs = model(ids, mask)
         loss = criterion(outputs, targets)
 
         losses.update(loss.item(), batch_size)
@@ -413,6 +400,9 @@ def main(fold):
 
     LOGGER.info(f'-------------fold:{fold} training-------------')
 
+    train = pd.read_csv('input/train_folds.csv')
+    train['full_text'] = train['full_text'].map(add_token_preprocess)
+
     train_data = train[train.kfold != fold].reset_index(drop=True)
     valid_data = train[train.kfold == fold].reset_index(drop=True)
     valid_labels = valid_data[CFG.targets].values
@@ -449,6 +439,14 @@ if __name__=="__main__":
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = '12355'
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    set_seed(CFG.seed)
+
+    setup_tokenizer(CFG)
+
+    OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
 
     fold = 0
     main(fold)
