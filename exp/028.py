@@ -267,7 +267,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list, epoch):
+def train_one_epoch(rank, model, optimizer, train_dataset, train_return_dict, epoch):
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
     model = model.to(rank)
@@ -328,11 +328,11 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_list, ep
     else:
         loss_avg = None
  
-    train_return_list.append(loss_avg)
+    train_return_dict['train_loss'] = loss_avg
 
 
 @torch.no_grad()
-def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
+def valid_one_epoch(rank, model, valid_dataset, valid_return_dict, epoch):
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
     model = model.to(rank)
@@ -386,9 +386,11 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_list, epoch):
         # DistributedSampler pads the dataset to get a multiple of world size
         predictions = predictions[:len(valid_dataset)]
         predictions = predictions.cpu().numpy()
-        valid_return_list.append([loss_avg, predictions])
+        valid_return_dict['valid_loss'] = loss_avg 
+        valid_return_dict['predictions'] = predictions
     else:
-        valid_return_list.append([None, None])
+        valid_return_dict['valid_loss'] = loss_avg
+        valid_return_dict['predictions'] = predictions
 
 
 def main(fold):
@@ -396,8 +398,8 @@ def main(fold):
     setup_tokenizer(CFG)
 
     manager = mp.Manager()
-    train_return_list = manager.list()
-    valid_return_list = manager.list()
+    train_return_dict = manager.dict()
+    valid_return_dict = manager.dict()
 
     LOGGER.info(f'-------------fold:{fold} training-------------')
 
@@ -423,17 +425,17 @@ def main(fold):
     epoch = 0
 
     mp.spawn(train_one_epoch,
-        args=(model, optimizer, trainDataset, train_return_list, epoch),
+        args=(model, optimizer, trainDataset, train_return_dict, epoch),
         nprocs=CFG.n_gpu,
         join=True)
 
     mp.spawn(valid_one_epoch,
-        args=(model, validDataset, valid_return_list, epoch),
+        args=(model, validDataset, valid_return_dict, epoch),
         nprocs=CFG.n_gpu,
         join=True)
 
-    LOGGER.info(train_return_list)
-    LOGGER.info(valid_return_list)
+    LOGGER.info(train_return_dict)
+    LOGGER.info(valid_return_dict)
 
 
 if __name__=="__main__":
