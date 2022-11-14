@@ -43,11 +43,15 @@ from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_wi
 from src.machine_learning_util import set_seed, set_device, init_logger, AverageMeter, to_pickle, unpickle, asMinutes, timeSince
 
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+
 class CFG:
     EXP_ID = '028'
+    debug = False
     apex = True
     train = True
-    debug = False
     sync_bn = True
     n_gpu = 2
     seed = 2022
@@ -77,6 +81,21 @@ class CFG:
 
 
 LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
+OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+
+
+def setup_ddp(rank, world_size):
+    os.environ['MASTER_ADDR'] = 'localhost'
+    os.environ['MASTER_PORT'] = '12355'
+
+    # initialize the process group
+    dist.init_process_group("nccl", rank=rank, world_size=world_size)
+
+
+def cleanup_ddp():
+    dist.destroy_process_group()
 
 
 def setup_tokenizer(CFG):
@@ -187,8 +206,8 @@ class FeedBackModel(nn.Module):
             freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
-        if self.cfg.gradient_checkpoint:
-            self.model.gradient_checkpointing_enable() 
+        #if self.cfg.gradient_checkpoint:
+        #    self.model.gradient_checkpointing_enable() 
 
         #if self.cfg.reinit_layers > 0:
         #    layers = self.model.encoder.layer[-self.cfg.reinit_layers:]
@@ -267,18 +286,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, train_dataset, train_return_dict, epoch):
-    torch.cuda.set_device(rank)
-    dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
-    model = model.to(rank)
-    model = DDP(model, device_ids=[rank])
-
-    num_train_steps = int(len(train_dataset) / CFG.batch_size * CFG.epochs)
-    scheduler = get_scheduler(CFG, optimizer, num_train_steps)
-
-    sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True, seed=CFG.seed, drop_last=True,)
-    dataloader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=sampler, pin_memory=True, drop_last=True)
-
+def train_one_epoch(rank, model, optimizer, scheduler, dataloader, epoch):
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
     losses = AverageMeter()
@@ -327,20 +335,11 @@ def train_one_epoch(rank, model, optimizer, train_dataset, train_return_dict, ep
         loss_avg = torch.cat(loss_avg).mean().item()
     else:
         loss_avg = None
- 
-    train_return_dict['train_loss'] = loss_avg
+    return loss_avg
 
 
 @torch.no_grad()
-def valid_one_epoch(rank, model, valid_dataset, valid_return_dict, epoch):
-    torch.cuda.set_device(rank)
-    dist.init_process_group("nccl", rank=rank, world_size=CFG.n_gpu)
-    model = model.to(rank)
-    model = DDP(model, device_ids=[rank])
-
-    sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False, seed=CFG.seed, drop_last=True,)
-    dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=sampler, pin_memory=True, drop_last=False)
-
+def valid_one_epoch(rank, model, dataloader, valid_dataset, epoch):
     model.eval()
     losses = AverageMeter()
 
@@ -386,67 +385,132 @@ def valid_one_epoch(rank, model, valid_dataset, valid_return_dict, epoch):
         # DistributedSampler pads the dataset to get a multiple of world size
         predictions = predictions[:len(valid_dataset)]
         predictions = predictions.cpu().numpy()
-        valid_return_dict['valid_loss'] = loss_avg 
-        valid_return_dict['predictions'] = predictions
+        return loss_avg, predictions
     else:
-        valid_return_dict['valid_loss'] = loss_avg
-        valid_return_dict['predictions'] = predictions
+        return None, None
 
 
-def main(fold):
+def train_loop(rank, CFG, fold, return_dict):
+
+    LOGGER.info(f"Running basic DDP example on rank {rank}.")
+    setup_ddp(rank, CFG.n_gpu)
+
     set_seed(CFG.seed)
-    setup_tokenizer(CFG)
 
-    manager = mp.Manager()
-    train_return_dict = manager.dict()
-    valid_return_dict = manager.dict()
-
-    LOGGER.info(f'-------------fold:{fold} training-------------')
+    if rank == 0:
+        LOGGER.info(f'-------------fold:{fold} training-------------')
 
     train = pd.read_csv('input/train_folds.csv')
     train['full_text'] = train['full_text'].map(add_token_preprocess)
+
+    if CFG.debug:
+        train = train.sample(n=128)
+        CFG.print_freq = 8
+        CFG.eval_freq = 32
+        CFG.epochs = 1
 
     train_data = train[train.kfold != fold].reset_index(drop=True)
     valid_data = train[train.kfold == fold].reset_index(drop=True)
     valid_labels = valid_data[CFG.targets].values
 
-    trainDataset = FeedBackDataset(train_data, CFG.tokenizer, CFG.max_len)
-    validDataset = FeedBackDataset(valid_data, CFG.tokenizer, CFG.max_len)
+    train_dataset = FeedBackDataset(train_data, CFG.tokenizer, CFG.max_len)
+    valid_dataset = FeedBackDataset(valid_data, CFG.tokenizer, CFG.max_len)
+
+    train_sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True, seed=CFG.seed, drop_last=True,)
+    train_dataloader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=train_sampler, pin_memory=True, drop_last=True)
+
+    valid_sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False, seed=CFG.seed, drop_last=False,)
+    valid_dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=valid_sampler, pin_memory=True, drop_last=False)
 
     model = FeedBackModel(CFG.model)
     torch.save(model.config, OUTPUT_DIR+'config.pth')
+    model = model.to(rank)
+    model = DDP(model, device_ids=[rank])
 
     # wrap for DDP
     if CFG.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
     optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
+    num_train_steps = int(len(train_dataset) / CFG.batch_size * CFG.epochs)
+    scheduler = get_scheduler(CFG, optimizer, num_train_steps)
 
-    epoch = 0
+    # loop
+    best_score = 100
 
-    mp.spawn(train_one_epoch,
-        args=(model, optimizer, trainDataset, train_return_dict, epoch),
-        nprocs=CFG.n_gpu,
-        join=True)
+    for epoch in range(CFG.epochs):
 
-    mp.spawn(valid_one_epoch,
-        args=(model, validDataset, valid_return_dict, epoch),
-        nprocs=CFG.n_gpu,
-        join=True)
+        start_time = time.time()
 
-    LOGGER.info(train_return_dict)
-    LOGGER.info(valid_return_dict)
+        #train_epoch_loss, valid_epoch_loss, pred, best_score = train_one_epoch(rank, model, optimizer, scheduler, train_loader, valid_loader, epoch, fold, best_score, valid_labels)
+
+        train_epoch_loss = train_one_epoch(rank, model, optimizer, scheduler, train_dataloader, epoch)
+        valid_epoch_loss, pred = valid_one_epoch(rank, model, valid_dataloader, valid_dataset, epoch)
+
+        if rank == 0:
+            score = get_score(pred, valid_labels)
+
+            elapsed = time.time() - start_time
+
+            LOGGER.info(f'Epoch {epoch+1} - avg_train_loss: {train_epoch_loss:.4f}  avg_val_loss: {valid_epoch_loss:.4f}  time: {elapsed:.0f}s')
+            LOGGER.info(f'Epoch {epoch+1} - Score: {score:.4f}')
+
+            if score < best_score:
+                best_score = score
+                LOGGER.info(f'Epoch {epoch+1} - Save Best Score: {best_score:.4f} Model')
+                torch.save({'model': model.state_dict(),
+                            'predictions': pred},
+                            OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth")
+
+    if rank == 0:
+        predictions = torch.load(OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
+                                 map_location=torch.device('cpu'))['predictions']
+        valid_data['pred_0'] = predictions[:, 0]
+        valid_data['pred_1'] = predictions[:, 1]
+        valid_data['pred_2'] = predictions[:, 2]
+        valid_data['pred_3'] = predictions[:, 3]
+        valid_data['pred_4'] = predictions[:, 4]
+        valid_data['pred_5'] = predictions[:, 5]
+
+        torch.cuda.empty_cache()
+        gc.collect()
+
+        return_dict[fold] = valid_data
+
+        cleanup_ddp()
+
+
+def get_result(oof_df):
+    labels = oof_df[CFG.targets].values
+    preds = oof_df[['pred_0', 'pred_1', 'pred_2', 'pred_3', 'pred_4', 'pred_5']].values
+    score = get_score(preds, labels)
+    LOGGER.info(f'Score: {score:<.4f}')
+
+
+def main():
+    manager = mp.Manager()
+    return_dict = manager.dict()
+
+    setup_tokenizer(CFG)
+
+    if torch.cuda.device_count() > 1:
+        LOGGER.info(f"We have available {torch.cuda.device_count()}, GPUs! but using {CFG.n_gpu} GPUs")
+
+    if CFG.train:
+        oof_df = pd.DataFrame()
+        for fold in range(CFG.n_fold):
+            mp.spawn(train_loop, args=(CFG, fold, return_dict), nprocs=CFG.n_gpu, join=True)
+            _oof_df = return_dict[fold]
+            oof_df = pd.concat([oof_df, _oof_df])
+            LOGGER.info(f"========== fold: {fold} result ==========")
+            get_result(_oof_df)
+
+        oof_df = oof_df.reset_index(drop=True)
+        LOGGER.info(f"========== CV ==========")
+        get_result(oof_df)
+        oof_df.to_csv(OUTPUT_DIR+f'oof_df.csv', index=False)
 
 
 if __name__=="__main__":
-    os.environ['MASTER_ADDR'] = 'localhost'
-    os.environ['MASTER_PORT'] = '12355'
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-    OUTPUT_DIR = f'output/{CFG.EXP_ID}/'
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
-
-    fold = 0
-    main(fold)
+    main()
 
