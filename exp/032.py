@@ -239,7 +239,6 @@ class FeedBackModel(nn.Module):
 
         logits = self.output(sequence_output)
         
-        logits = torch.clip(logits, min=1, max=5)
         return logits
 
 
@@ -407,6 +406,7 @@ def valid_one_epoch(rank, model, dataloader, valid_dataset, epoch):
         # DistributedSampler pads the dataset to get a multiple of world size
         predictions = predictions[:len(valid_dataset)]
         predictions = predictions.cpu().numpy()
+        predictions = np.clip(predictions, 1, 5)
         return loss_avg, predictions
     else:
         return None, None
