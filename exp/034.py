@@ -55,7 +55,7 @@ class CFG:
     sync_bn = True
     n_gpu = 2
     seed = 2022
-    model = 'microsoft/deberta-v3-bage' # 'microsoft/deberta-v3-large'
+    model = 'microsoft/deberta-v3-base' # 'microsoft/deberta-v3-large'
     n_splits = 5
     max_len = 1536
     targets = ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]
