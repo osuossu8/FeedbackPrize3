@@ -66,9 +66,9 @@ class CFG:
     scheduler = 'cosine'
     batch_size = 1
     num_workers = 0
-    lr = 5e-6
+    lr = 5e-7 # 7e-6 # 5e-6
     weigth_decay = 0.01
-    min_lr=1e-6
+    min_lr= 1e-7 # 1e-6
     num_warmup_steps = 0
     num_cycles=0.5
     epochs = 4
