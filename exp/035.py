@@ -107,16 +107,15 @@ if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
 
-class FeedBackDataset(Dataset):
-    def __init__(self, df, tokenizer, max_length):
-        self.df = df
-        self.max_len = CFG.max_len
-        self.text = df['full_text'].values
-        self.tokenizer = CFG.tokenizer
-        self.targets = df[CFG.targets].values
+class TestDataset(Dataset):
+    def __init__(self, cfg, df):
+        self.cfg = cfg
+        self.texts = df['full_text'].values
+        self.tokenizer = cfg.tokenizer
+        self.max_len = cfg.max_len
 
     def __len__(self):
-        return len(self.df)
+        return len(self.texts)
 
     # staticmethod に書き換えたい
     def cut_head_and_tail(self, text):
@@ -151,7 +150,7 @@ class FeedBackDataset(Dataset):
         return d
 
     def __getitem__(self, index):
-        text = self.text[index]
+        text = self.texts[index]
         inputs = self.cut_head_and_tail(text)
         return inputs
 
