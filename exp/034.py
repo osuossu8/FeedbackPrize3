@@ -66,12 +66,12 @@ class CFG:
     scheduler = 'cosine'
     batch_size = 2 #1
     num_workers = 0
-    lr = 5e-7 # 7e-6
+    lr = 7e-6 # 5e-7 # 7e-6
     weigth_decay = 0.01
-    min_lr= 1e-7 # 1e-6
+    min_lr= 1e-6 # 1e-7 # 1e-6
     num_warmup_steps = 0
     num_cycles=0.5
-    epochs = 4
+    epochs = 5 # 4
     n_fold = 5
     trn_fold = [i for i in range(n_fold)]
     freezing = True
