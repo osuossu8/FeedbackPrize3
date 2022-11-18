@@ -270,7 +270,7 @@ deberta_large = Config(
     file_name='microsoft_deberta_large_1024',
     pretrained=True, inference_weight=1, max_len=640) #
 deberta_xlarge = Config(
-    model='microsoft/deberta-xlarge'
+    model='microsoft/deberta-xlarge',
     file_name='microsoft_deberta_xlarge_1024',
     pretrained=True, inference_weight=1, max_len=640)
 deberta_v2_xlarge = Config(
