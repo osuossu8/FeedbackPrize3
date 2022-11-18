@@ -333,6 +333,7 @@ skf = MultilabelStratifiedKFold(n_splits=svr_folds, shuffle=True, random_state=4
 for i,(train_index, val_index) in enumerate(skf.split(train,train[target_cols])):
     train.loc[val_index,'fold'] = i
 
+train = train.head(100)
 
 from glob import glob 
 
@@ -447,14 +448,11 @@ pretrained_models_cfg = [
 ]
 
 for cfg in tqdm(pretrained_models_cfg):
-    try:
-        test_text_emb = get_text_embedding(cfg, [train])[0]
-        model_file = f'{OUTPUT_DIR}/train_text_emb_{cfg.file_name}.npy'
-        np.save(model_file, test_text_emb)
-        del test_text_emb; gc.collect(); torch.cuda.empty_cache();
-        LOGGER.info(f'{cfg.model} saved.')
-    except:
-        pass
+    test_text_emb = get_text_embedding(cfg, [train])[0]
+    model_file = f'{OUTPUT_DIR}/train_text_emb_{cfg.file_name}.npy'
+    np.save(model_file, test_text_emb)
+    del test_text_emb; gc.collect(); torch.cuda.empty_cache();
+    LOGGER.info(f'{cfg.model} saved.')
 
 gc.collect(); torch.cuda.empty_cache();
 
