@@ -365,6 +365,9 @@ def get_text_embedding(cfg, dfs):
 
 def learner_cv(features, learner, folds=15, save=False, verbose=False):
     scores = []
+    oof_list = []
+    id_list = []
+    fold_list = []
     for fold in range(folds):
         dftr_ = train[train['fold']!=fold]
         dfev_ = train[train['fold']==fold]
@@ -375,10 +378,13 @@ def learner_cv(features, learner, folds=15, save=False, verbose=False):
         clf = MultiOutputRegressor(learner)
         clf.fit(tr_text_feats, dftr_[target_cols].values)
         ev_preds = clf.predict(ev_text_feats)
-
-        score,_ = mc_rmse(dfev_[target_cols].values, ev_preds)
+        
+        score, _ = mc_rmse(dfev_[target_cols].values, ev_preds)
         scores.append(score)
 
+        id_list.append(dfev_['text_id'].values)
+        oof_list.append(ev_preds)
+        fold_list.append(dfev_['fold'].values)
         if verbose:
             LOGGER.info('#'*25)
             LOGGER.info('### Fold',fold+1)
@@ -386,6 +392,12 @@ def learner_cv(features, learner, folds=15, save=False, verbose=False):
         if save:
             dump(clf, f'{OUTPUT_DIR}/svr_{fold}.model')
 
+    oof_df = pd.DataFrame()
+    oof_df['text_id'] = np.concatenate(id_list, 0)
+    oof_df[['pred_0', 'pred_1', 'pred_2', 'pred_3', 'pred_4', 'pred_5']] = np.concatenate(oof_list, 0)
+    LOGGER.info(oof_df.shape)
+    LOGGER.info(oof_df.columns)
+    oof_df.to_csv(f'{OUTPUT_DIR}/svr_oof_df.csv', index=False)
     return np.mean(scores)
 
 
@@ -435,11 +447,14 @@ pretrained_models_cfg = [
 ]
 
 for cfg in tqdm(pretrained_models_cfg):
-    test_text_emb = get_text_embedding(cfg, [train])[0]
-    model_file = f'{OUTPUT_DIR}/train_text_emb_{cfg.file_name}.npy'
-    np.save(model_file, test_text_emb)
-    del test_text_emb; gc.collect(); torch.cuda.empty_cache();
-    LOGGER.info(f'{cfg.model} saved.')
+    try:
+        test_text_emb = get_text_embedding(cfg, [train])[0]
+        model_file = f'{OUTPUT_DIR}/train_text_emb_{cfg.file_name}.npy'
+        np.save(model_file, test_text_emb)
+        del test_text_emb; gc.collect(); torch.cuda.empty_cache();
+        LOGGER.info(f'{cfg.model} saved.')
+    except:
+        pass
 
 gc.collect(); torch.cuda.empty_cache();
 
