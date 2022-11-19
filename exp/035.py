@@ -41,7 +41,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig
 from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
 
 
-from src.machine_learning_util import set_seed, set_device, init_logger, AverageMeter, to_pickle, unpickle, asMinutes, timeSince
+from src.machine_learning_util import set_seed, set_device, init_logger, AverageMeter, to_pickle, unpickle, asMinutes, timeSince, trace
 from iterstrat.ml_stratifiers import MultilabelStratifiedKFold
 
 
@@ -108,6 +108,33 @@ if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
 
+def encode_text(cfg, text):
+    if cfg.pretrained:
+        inputs = cfg.tokenizer(
+            text,
+            None,
+            add_special_tokens=True,
+            padding='max_length',
+            truncation=True,
+            max_length=cfg.max_len,
+            return_token_type_ids=True,
+            return_tensors='pt'
+        )
+        inputs = {k:v.squeeze(0) for k,v in inputs.items()}
+    else:
+        inputs = cfg.tokenizer.encode_plus(
+            text,
+            return_tensors=None,
+            add_special_tokens=True,
+            #max_length=CFG.max_len,
+            #pad_to_max_length=True,
+            #truncation=True
+        )
+        for k, v in inputs.items():
+            inputs[k] = torch.tensor(v, dtype=torch.long)
+    return inputs
+
+
 class TestDataset(Dataset):
     def __init__(self, cfg, df):
         self.cfg = cfg
@@ -152,7 +179,8 @@ class TestDataset(Dataset):
 
     def __getitem__(self, index):
         text = self.texts[index]
-        inputs = self.cut_head_and_tail(text)
+        # inputs = self.cut_head_and_tail(text)
+        inputs = encode_text(self.cfg, text)
         return inputs
 
 
@@ -207,7 +235,7 @@ class Inferencer:
     def predict(self, test_loader, device, stat_fn=np.mean):
         preds = []
         start = time.time()
-        LOGGER.info('#'*10, cfg.path, '#'*10)
+        print('#'*10, cfg.path, '#'*10)
         for fold in self.cfg.trn_fold:
             LOGGER.info(f'Predicting fold {fold}...')
             model = load_model(self.cfg, fold)
@@ -216,7 +244,7 @@ class Inferencer:
             del model, pred; gc.collect()
             torch.cuda.empty_cache()
         end = time.time() - start
-        LOGGER.info('#'*10, f'ETA: {end:.2f}s', '#'*10, '\n')
+        print('#'*10, f'ETA: {end:.2f}s', '#'*10, '\n')
         
         self.preds = stat_fn(preds, axis=0) 
         self.preds = np.clip(self.preds, 1, 5)
@@ -333,9 +361,8 @@ skf = MultilabelStratifiedKFold(n_splits=svr_folds, shuffle=True, random_state=4
 for i,(train_index, val_index) in enumerate(skf.split(train,train[target_cols])):
     train.loc[val_index,'fold'] = i
 
-train = train.head(100)
+train = train.head(50)
 
-from glob import glob 
 
 def get_text_embedding(cfg, dfs):
     cfg.tokenizer = AutoTokenizer.from_pretrained(cfg.model)
@@ -388,7 +415,7 @@ def learner_cv(features, learner, folds=15, save=False, verbose=False):
         fold_list.append(dfev_['fold'].values)
         if verbose:
             LOGGER.info('#'*25)
-            LOGGER.info('### Fold',fold+1)
+            LOGGER.info(f'### Fold {fold+1}')
             LOGGER.info("Score: {}".format(score))
         if save:
             dump(clf, f'{OUTPUT_DIR}/svr_{fold}.model')
@@ -448,10 +475,11 @@ pretrained_models_cfg = [
 ]
 
 for cfg in tqdm(pretrained_models_cfg):
-    test_text_emb = get_text_embedding(cfg, [train])[0]
-    model_file = f'{OUTPUT_DIR}/train_text_emb_{cfg.file_name}.npy'
-    np.save(model_file, test_text_emb)
-    del test_text_emb; gc.collect(); torch.cuda.empty_cache();
+    with trace(f'{cfg.model} start.'):
+        test_text_emb = get_text_embedding(cfg, [train])[0]
+        model_file = f'{OUTPUT_DIR}/train_text_emb_{cfg.file_name}.npy'
+        np.save(model_file, test_text_emb)
+        del test_text_emb; gc.collect(); torch.cuda.empty_cache();
     LOGGER.info(f'{cfg.model} saved.')
 
 gc.collect(); torch.cuda.empty_cache();
