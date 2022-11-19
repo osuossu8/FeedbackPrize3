@@ -288,58 +288,61 @@ class Inferencer:
 # model_set=['roberta_base', 'roberta_large', 'deberta_base', 'deberta_large', 'deberta_v2_xlarge', 'deberta_v2_xxlarge', 'deberta_v3_base', 'deberta_v3_large'];   score=0.4499109371935949
 # model_set=['deberta_large_mnli', 'roberta_base', 'roberta_large', 'xlnet_base_cased', 'xlnet_large_cased', 'deberta_base', 'deberta_large', 'deberta_xlarge', 'deberta_v2_xlarge', 'deberta_v2_xxlarge', 'deberta_v3_base', 'deberta_v3_large'];   score=0.4499581917973121
 
+MAX_LEN1 = 1024 # 640
+MAX_LEN2 = 1024 # 512
+
 ##################################################
 deberta_base = Config(
     model='microsoft/deberta-base',
     file_name='microsoft_deberta_base_768',
-    pretrained=True, inference_weight=1, max_len=640) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 deberta_large = Config(
     model='microsoft/deberta-large',
     file_name='microsoft_deberta_large_1024',
-    pretrained=True, inference_weight=1, max_len=640) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 deberta_xlarge = Config(
     model='microsoft/deberta-xlarge',
     file_name='microsoft_deberta_xlarge_1024',
-    pretrained=True, inference_weight=1, max_len=640)
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 deberta_v2_xlarge = Config(
     model='microsoft/deberta-v2-xlarge',
     file_name='microsoft_deberta_v2_xlarge_1536',
-    pretrained=True, inference_weight=1, max_len=640)
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 deberta_v2_xxlarge = Config(
     model='microsoft/deberta-v2-xxlarge',
     file_name='microsoft_deberta_v2_xxlarge_1536',
-    pretrained=True, inference_weight=1, max_len=640)
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 
 deberta_v3_base = Config(
     model='microsoft/deberta-v3-base',
     file_name='microsoft_deberta_v3_base_768',
-    pretrained=True, inference_weight=1, max_len=640) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 deberta_v3_large = Config(
     model='microsoft/deberta-v3-large',
     file_name='microsoft_deberta_v3_large_1024',
-    pretrained=True, inference_weight=1, max_len=640) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 deberta_large_mnli = Config(
     model='microsoft/deberta-large-mnli',
     file_name='microsoft_deberta_large_mnli_1024',
-    pretrained=True, inference_weight=1, max_len=640) # 
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 
 roberta_base = Config(
     model='roberta-base',
     file_name='roberta_base_768',
-    pretrained=True, inference_weight=1, max_len=512) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN2)
 roberta_large = Config(
     model='roberta-large',
     file_name='roberta_large_1024',
-    pretrained=True, inference_weight=1, max_len=512) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN2)
 
 xlnet_base = Config(
     model='xlnet-base-cased',
     file_name='xlnet_base_cased_768',
-    pretrained=True, inference_weight=1, max_len=640) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 xlnet_large = Config(
     model='xlnet-large-cased',
     file_name='xlnet_large_cased_1024',
-    pretrained=True, inference_weight=1, max_len=640) #
+    pretrained=True, inference_weight=1, max_len=MAX_LEN1)
 
 ##################################################
 
@@ -361,7 +364,7 @@ skf = MultilabelStratifiedKFold(n_splits=svr_folds, shuffle=True, random_state=4
 for i,(train_index, val_index) in enumerate(skf.split(train,train[target_cols])):
     train.loc[val_index,'fold'] = i
 
-train = train.head(50)
+# train = train.head(50)
 
 
 def get_text_embedding(cfg, dfs):
