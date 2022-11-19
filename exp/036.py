@@ -71,7 +71,7 @@ class CFG:
     min_lr=1e-6
     num_warmup_steps = 0
     num_cycles=0.5
-    epochs = 6
+    epochs = 4
     n_fold = 5
     trn_fold = [i for i in range(n_fold)]
     freezing = True
@@ -183,6 +183,25 @@ def freeze(module):
         parameter.requires_grad = False
 
 
+#Attention pooling
+class AttentionPooling(nn.Module):
+    def __init__(self, in_dim):
+        super().__init__()
+        self.attention = nn.Sequential(
+        nn.Linear(in_dim, in_dim),
+        nn.LayerNorm(in_dim),
+        nn.GELU(),
+        nn.Linear(in_dim, 1),
+        )
+
+    def forward(self, last_hidden_state, attention_mask):
+        w = self.attention(last_hidden_state).float()
+        w[attention_mask==0]=float('-inf')
+        w = torch.softmax(w,1)
+        attention_embeddings = torch.sum(w * last_hidden_state, dim=1)
+        return attention_embeddings
+
+
 class FeedBackModel(nn.Module):
     def __init__(self, model_name):
         super(FeedBackModel, self).__init__()
@@ -193,6 +212,8 @@ class FeedBackModel(nn.Module):
         self.config.attention_probs_dropout_prob = 0
 
         self.model = AutoModel.from_pretrained(model_name, config=self.config)
+
+        self.pool = AttentionPooling(self.config.hidden_size)
 
         self.output = nn.Sequential(
             nn.LayerNorm(self.config.hidden_size),
@@ -206,8 +227,8 @@ class FeedBackModel(nn.Module):
             freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
-        if self.cfg.gradient_checkpoint:
-            self.model.gradient_checkpointing_enable() 
+        # if self.cfg.gradient_checkpoint:
+        #     self.model.gradient_checkpointing_enable() 
 
         #if self.cfg.reinit_layers > 0:
         #    layers = self.model.encoder.layer[-self.cfg.reinit_layers:]
@@ -235,8 +256,8 @@ class FeedBackModel(nn.Module):
             transformer_out = self.model(ids, mask)
 
         # simple CLS
-        sequence_output = transformer_out[0][:, 0, :]
-
+        sequence_output = transformer_out[0] # [:, 0, :]
+        sequence_output = self.pool(sequence_output, mask)
         logits = self.output(sequence_output)
 
         return logits
@@ -255,7 +276,7 @@ def my_gather(output, local_rank, world_size):
 
 
 def criterion(outputs, targets):
-    loss_fct = nn.SmoothL1Loss(reduction='mean') # nn.MSELoss()
+    loss_fct = nn.MSELoss() # nn.SmoothL1Loss(reduction='mean')
     loss = loss_fct(outputs, targets)
     return loss
 
