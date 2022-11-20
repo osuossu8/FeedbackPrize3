@@ -351,7 +351,7 @@ def train_one_epoch(model, optimizer, scheduler, dataloader, valid_loader, devic
 
     gc.collect()
 
-    return epoch_loss, valid_epoch_loss, pred, best_score
+    return epoch_loss, valid_epoch_loss, pred, embs, best_score
 
 
 @torch.no_grad()
@@ -467,8 +467,12 @@ def train_loop(fold):
     embeddings = torch.load(OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
                              map_location=torch.device('cpu'))['embeddings']
 
+    LOGGER.info(valid_data.shape)
+    LOGGER.info(predictions.shape)
     LOGGER.info(embeddings.shape)
-    valid_data[[f'embedding_{i}' for i in range(model.config.hidden_size)]] = embeddings
+    valid_data.loc[:, [f'embedding_{i}' for i in range(model.config.hidden_size)]] = embeddings
+
+    LOGGER.info(valid_data.shape)
 
     del embeddings; gc.collect()
 
