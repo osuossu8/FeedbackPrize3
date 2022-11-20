@@ -462,13 +462,14 @@ def train_loop(fold):
     valid_data['pred_4'] = predictions[:, 4]
     valid_data['pred_5'] = predictions[:, 5]
 
+    LOGGER.info(valid_data.shape)
+    LOGGER.info(predictions.shape)
+
     del predictions; gc.collect()
 
     embeddings = torch.load(OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
                              map_location=torch.device('cpu'))['embeddings']
 
-    LOGGER.info(valid_data.shape)
-    LOGGER.info(predictions.shape)
     LOGGER.info(embeddings.shape)
     valid_data.loc[:, [f'embedding_{i}' for i in range(model.config.hidden_size)]] = embeddings
 
