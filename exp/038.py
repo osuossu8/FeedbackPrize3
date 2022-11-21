@@ -41,6 +41,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig
 from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
 
 
+from iterstrat.ml_stratifiers import MultilabelStratifiedKFold
 from src.machine_learning_util import set_seed, set_device, init_logger, AverageMeter, to_pickle, unpickle, asMinutes, timeSince
 
 
