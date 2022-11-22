@@ -56,7 +56,7 @@ class CFG:
     train = True
     sync_bn = True
     n_gpu = 2
-    seed = 2022
+    seed = 38 # 2022
     model = 'microsoft/deberta-v3-large'
     n_splits = 5
     max_len = 1536
@@ -508,7 +508,7 @@ def train_loop(rank, CFG, fold, return_dict):
         valid_data['pred_4'] = predictions[:, 4]
         valid_data['pred_5'] = predictions[:, 5]
 
-        valid_data.loc[:, [f'embedding_{i}' for i in range(model.config.hidden_size)]] = embs
+        valid_data.loc[:, [f'embedding_{i}' for i in range(model.module.config.hidden_size)]] = embs
 
         torch.cuda.empty_cache()
         gc.collect()
