@@ -64,7 +64,7 @@ class CFG:
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 733 # 780 # * 2
+    eval_freq = 732 # 780 # * 2
     scheduler = 'cosine'
     batch_size = 1
     num_workers = 0
@@ -436,7 +436,7 @@ def train_loop(rank, CFG, fold, return_dict):
 
     train = pd.read_csv('input/train_folds.csv')
 
-    skf = MultilabelStratifiedKFold(n_splits=CFG.n_fold, shuffle=True, random_state=42)
+    skf = MultilabelStratifiedKFold(n_splits=CFG.n_fold, shuffle=True, random_state=CFG.seed)
     for i,(train_index, val_index) in enumerate(skf.split(train,train[CFG.targets])):
         train.loc[val_index,'kfold'] = i
 
@@ -445,7 +445,7 @@ def train_loop(rank, CFG, fold, return_dict):
     if CFG.debug:
         train = train.sample(n=128)
         CFG.print_freq = 8
-        CFG.eval_freq = 32
+        CFG.eval_freq = 23
         CFG.epochs = 1
 
     train_data = train[train.kfold != fold].reset_index(drop=True)
