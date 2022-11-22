@@ -354,7 +354,7 @@ def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_dataloa
                                 'predictions': pred},
                                 OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth")
 
-                # model.train()
+                model.train()
 
     gc.collect()
 
