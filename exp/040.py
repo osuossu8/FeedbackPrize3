@@ -51,7 +51,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 class CFG:
     EXP_ID = '040'
-    debug = True # False
+    debug = False
     apex = True
     train = True
     sync_bn = True
@@ -100,13 +100,6 @@ def cleanup_ddp():
     dist.destroy_process_group()
 
 
-def setup_tokenizer(CFG):
-    CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
-    #CFG.tokenizer.add_tokens([f"\r"], special_tokens=True)
-    #CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
-    #CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
-
-
 def add_token_preprocess(row):
     res = ["[START]"]
     for sentence in row.split('\n'):
@@ -125,7 +118,7 @@ class FeedBackDataset(Dataset):
         self.df = df
         self.max_len = CFG.max_len
         self.text = df['full_text'].values
-        self.tokenizer = CFG.tokenizer
+        self.tokenizer = tokenizer
         self.targets = df[CFG.targets].values
 
     def __len__(self):
@@ -309,7 +302,7 @@ def get_scheduler(cfg, optimizer, num_train_steps):
     return scheduler
 
 
-def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_dataloader, epoch, fold, best_score, valid_dataset, valid_labels):
+def train_one_epoch(rank, model, optimizer, scheduler, dataloader, epoch):
     model.train()
     scaler = GradScaler(enabled=CFG.apex)
     losses = AverageMeter()
@@ -359,27 +352,9 @@ def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_dataloa
         else:
             epoch_loss = None
 
-        if (step > 0) & (step % CFG.eval_freq == 0):
-
-            valid_epoch_loss, pred, embs = valid_one_epoch(rank, model, valid_dataloader, valid_dataset, epoch)
-
-            if rank == 0:
-                score = get_score(pred, valid_labels)
-                LOGGER.info(f'Epoch {epoch+1} Step {step} - avg_train_loss: {epoch_loss:.4f}  avg_val_loss: {valid_epoch_loss:.4f}')
-                LOGGER.info(f'Epoch {epoch+1} Step {step} - Score: {score:.4f}')
-
-                if score < best_score:
-                    best_score = score
-                    LOGGER.info(f'Epoch {epoch+1} Step {step} - Save Best Score: {best_score:.4f} Model')
-                    torch.save({'model': model.state_dict(),
-                                'predictions': pred},
-                                OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth")
-
-                # model.train()
-
     gc.collect()
 
-    return epoch_loss, valid_epoch_loss, pred, embs, best_score
+    return epoch_loss
 
 
 @torch.no_grad()
@@ -448,7 +423,7 @@ def valid_one_epoch(rank, model, dataloader, valid_dataset, epoch):
         return None, None, None
 
 
-def train_loop(rank, CFG, fold, return_dict):
+def train_loop(rank, CFG, fold, return_dict, model_name, tokenizer):
 
     LOGGER.info(f"Running basic DDP example on rank {rank}.")
     setup_ddp(rank, CFG.n_gpu)
@@ -467,17 +442,16 @@ def train_loop(rank, CFG, fold, return_dict):
     # train['full_text'] = preprocess(train['full_text'])
 
     if CFG.debug:
-        train = train.sample(n=128)
+        train = train.sample(n=64)
         CFG.print_freq = 8
-        CFG.eval_freq = 23
         CFG.epochs = 1
 
     train_data = train[train.kfold != fold].reset_index(drop=True)
     valid_data = train[train.kfold == fold].reset_index(drop=True)
     valid_labels = valid_data[CFG.targets].values
 
-    train_dataset = FeedBackDataset(train_data, CFG.tokenizer, CFG.max_len)
-    valid_dataset = FeedBackDataset(valid_data, CFG.tokenizer, CFG.max_len)
+    train_dataset = FeedBackDataset(train_data, tokenizer, CFG.max_len)
+    valid_dataset = FeedBackDataset(valid_data, tokenizer, CFG.max_len)
 
     train_sampler = DistributedSampler(train_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=True, seed=CFG.seed, drop_last=True,)
     train_dataloader = DataLoader(train_dataset, batch_size=CFG.batch_size, sampler=train_sampler, pin_memory=True, drop_last=True)
@@ -485,7 +459,7 @@ def train_loop(rank, CFG, fold, return_dict):
     valid_sampler = DistributedSampler(valid_dataset, num_replicas=CFG.n_gpu, rank=rank, shuffle=False, seed=CFG.seed, drop_last=False,)
     valid_dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=valid_sampler, pin_memory=True, drop_last=False)
 
-    model = FeedBackModel(CFG.model)
+    model = FeedBackModel(model_name)
     # torch.save(model.config, OUTPUT_DIR+'config.pth')
     model = model.to(rank)
     model = DDP(model, device_ids=[rank])
@@ -505,7 +479,8 @@ def train_loop(rank, CFG, fold, return_dict):
 
         start_time = time.time()
 
-        train_epoch_loss, valid_epoch_loss, pred, embs, best_score = train_one_epoch(rank, model, optimizer, scheduler, train_dataloader, valid_dataloader, epoch, fold, best_score, valid_dataset, valid_labels)
+        train_epoch_loss = train_one_epoch(rank, model, optimizer, scheduler, train_dataloader, epoch)
+        valid_epoch_loss, pred, embs = valid_one_epoch(rank, model, valid_dataloader, valid_dataset, epoch)
 
         if rank == 0:
             score = get_score(pred, valid_labels)
@@ -520,10 +495,10 @@ def train_loop(rank, CFG, fold, return_dict):
                 LOGGER.info(f'Epoch {epoch+1} - Save Best Score: {best_score:.4f} Model')
                 torch.save({'model': model.state_dict(),
                             'predictions': pred},
-                            OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth")
+                            OUTPUT_DIR+f"{model_name.replace('/', '-')}_fold{fold}_best.pth")
 
     if rank == 0:
-        predictions = torch.load(OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
+        predictions = torch.load(OUTPUT_DIR+f"{model_name.replace('/', '-')}_fold{fold}_best.pth",
                                  map_location=torch.device('cpu'))['predictions']
         valid_data['pred_0'] = predictions[:, 0]
         valid_data['pred_1'] = predictions[:, 1]
@@ -549,14 +524,31 @@ def get_result(oof_df):
     LOGGER.info(f'Score: {score:<.4f}')
 
 
-def main():
+def main(model_name, tokenizer):
     manager = mp.Manager()
     return_dict = manager.dict()
 
-    setup_tokenizer(CFG)
-
     if torch.cuda.device_count() > 1:
         LOGGER.info(f"We have available {torch.cuda.device_count()}, GPUs! but using {CFG.n_gpu} GPUs")
+
+    # setup_tokenizer(CFG)
+    tokenizer.add_tokens([f"\n"], special_tokens=True)
+    if CFG.train:
+        oof_df = pd.DataFrame()
+        for fold in range(CFG.n_fold):
+            mp.spawn(train_loop, args=(CFG, fold, return_dict, model_name, tokenizer), nprocs=CFG.n_gpu, join=True)
+            _oof_df = return_dict[fold]
+            oof_df = pd.concat([oof_df, _oof_df])
+            LOGGER.info(f"========== fold: {fold} result ==========")
+            get_result(_oof_df)
+
+        oof_df = oof_df.reset_index(drop=True)
+        LOGGER.info(f"========== CV ==========")
+        get_result(oof_df)
+        oof_df.to_csv(OUTPUT_DIR+f"oof_df_{model_name.replace('/', '-')}.csv", index=False)
+
+
+if __name__=="__main__":
 
     model_list = [
         'microsoft/deberta-v3-large',
@@ -569,26 +561,9 @@ def main():
         'microsoft/deberta-base',
     ]
 
-    for model in tqdm(model_list):
-        CFG.model = model
-        CFG.tokenizer = AutoTokenizer.from_pretrained(model)
-        setup_tokenizer(CFG)
-
-        if CFG.train:
-            oof_df = pd.DataFrame()
-            for fold in range(CFG.n_fold):
-                mp.spawn(train_loop, args=(CFG, fold, return_dict), nprocs=CFG.n_gpu, join=True)
-                _oof_df = return_dict[fold]
-                oof_df = pd.concat([oof_df, _oof_df])
-                LOGGER.info(f"========== fold: {fold} result ==========")
-                get_result(_oof_df)
-
-            oof_df = oof_df.reset_index(drop=True)
-            LOGGER.info(f"========== CV ==========")
-            get_result(oof_df)
-            oof_df.to_csv(OUTPUT_DIR+f"oof_df_CFG.model.replace('/', '-').csv", index=False)
-
-
-if __name__=="__main__":
-    main()
+    for model_name in tqdm(model_list):
+        LOGGER.info('##########')
+        LOGGER.info(f'{model_name} : START !!')
+        LOGGER.info('##########')
+        main(model_name, AutoTokenizer.from_pretrained(model_name))
 
