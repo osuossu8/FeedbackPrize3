@@ -1,0 +1,320 @@
+We have available 2, GPUs! but using 2 GPUs
+Running basic DDP example on rank 1.
+Running basic DDP example on rank 0.
+-------------fold:0 training-------------
+Epoch: [1][0/366] Elapsed 0m 0s (remain 5m 24s) Loss: 2.6800(2.6800) 
+Epoch: [1][100/366] Elapsed 1m 11s (remain 3m 7s) Loss: 0.0986(0.6367) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 40s) Loss: 0.1157(0.1157) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.1454(0.1159) 
+Epoch 1 Step 183 - avg_train_loss: 0.4008  avg_val_loss: 0.1123
+Epoch 1 Step 183 - Score: 0.4744
+Epoch 1 Step 183 - Save Best Score: 0.4744 Model
+Epoch: [1][200/366] Elapsed 3m 4s (remain 2m 31s) Loss: 0.1504(0.3819) 
+Epoch: [1][300/366] Elapsed 4m 13s (remain 0m 54s) Loss: 0.1343(0.2945) 
+Epoch: [1][365/366] Elapsed 5m 1s (remain 0m 0s) Loss: 0.1225(0.2634) 
+Epoch 1 - avg_train_loss: 0.2632  avg_val_loss: 0.1123  time: 301s
+Epoch 1 - Score: 0.4744
+Epoch: [2][0/366] Elapsed 0m 0s (remain 5m 3s) Loss: 0.0734(0.0734) 
+Epoch: [2][100/366] Elapsed 1m 9s (remain 3m 1s) Loss: 0.0979(0.1069) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 32s) Loss: 0.1064(0.1064) 
+EVAL: [61/62] Elapsed 0m 40s (remain 0m 0s) Loss: 0.2052(0.1213) 
+Epoch 2 Step 183 - avg_train_loss: 0.1107  avg_val_loss: 0.1174
+Epoch 2 Step 183 - Score: 0.4853
+Epoch: [2][200/366] Elapsed 3m 1s (remain 2m 29s) Loss: 0.1024(0.1096) 
+Epoch: [2][300/366] Elapsed 4m 13s (remain 0m 54s) Loss: 0.1014(0.1074) 
+Epoch: [2][365/366] Elapsed 5m 0s (remain 0m 0s) Loss: 0.1238(0.1076) 
+Epoch 2 - avg_train_loss: 0.1102  avg_val_loss: 0.1174  time: 301s
+Epoch 2 - Score: 0.4853
+Epoch: [3][0/366] Elapsed 0m 0s (remain 4m 41s) Loss: 0.0782(0.0782) 
+Epoch: [3][100/366] Elapsed 1m 11s (remain 3m 6s) Loss: 0.0762(0.0982) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 15s) Loss: 0.1013(0.1013) 
+EVAL: [61/62] Elapsed 0m 40s (remain 0m 0s) Loss: 0.2230(0.1264) 
+Epoch 3 Step 183 - avg_train_loss: 0.1010  avg_val_loss: 0.1218
+Epoch 3 Step 183 - Score: 0.4944
+Epoch: [3][200/366] Elapsed 3m 5s (remain 2m 32s) Loss: 0.0927(0.1003) 
+Epoch: [3][300/366] Elapsed 4m 15s (remain 0m 55s) Loss: 0.0936(0.0987) 
+Epoch: [3][365/366] Elapsed 5m 0s (remain 0m 0s) Loss: 0.1098(0.0991) 
+Epoch 3 - avg_train_loss: 0.1011  avg_val_loss: 0.1218  time: 300s
+Epoch 3 - Score: 0.4944
+Epoch: [4][0/366] Elapsed 0m 0s (remain 3m 55s) Loss: 0.0765(0.0765) 
+We have available 2, GPUs! but using 2 GPUs
+Running basic DDP example on rank 1.
+Running basic DDP example on rank 0.
+-------------fold:0 training-------------
+Epoch: [1][0/366] Elapsed 0m 1s (remain 6m 45s) Loss: 2.6800(2.6800) 
+Epoch: [1][100/366] Elapsed 1m 11s (remain 3m 7s) Loss: 0.0986(0.6367) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 42s) Loss: 0.1191(0.1191) 
+EVAL: [61/62] Elapsed 0m 42s (remain 0m 0s) Loss: 0.1421(0.1162) 
+Epoch 1 Step 182 - avg_train_loss: 0.4024  avg_val_loss: 0.1125
+Epoch 1 Step 182 - Score: 0.4748
+Epoch 1 Step 182 - Save Best Score: 0.4748 Model
+Epoch: [1][200/366] Elapsed 3m 6s (remain 2m 33s) Loss: 0.1507(0.3819) 
+Epoch: [1][300/366] Elapsed 4m 16s (remain 0m 55s) Loss: 0.1322(0.2944) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 33s) Loss: 0.1385(0.1385) 
+EVAL: [61/62] Elapsed 0m 42s (remain 0m 0s) Loss: 0.1329(0.1195) 
+Epoch 1 Step 364 - avg_train_loss: 0.2635  avg_val_loss: 0.1163
+Epoch 1 Step 364 - Score: 0.4833
+Epoch: [1][365/366] Elapsed 5m 47s (remain 0m 0s) Loss: 0.1211(0.2633) 
+Epoch 1 - avg_train_loss: 0.2631  avg_val_loss: 0.1163  time: 347s
+Epoch 1 - Score: 0.4833
+Epoch: [2][0/366] Elapsed 0m 0s (remain 4m 25s) Loss: 0.0735(0.0735) 
+Epoch: [2][100/366] Elapsed 1m 12s (remain 3m 8s) Loss: 0.0978(0.1069) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 38s) Loss: 0.1153(0.1153) 
+EVAL: [61/62] Elapsed 0m 43s (remain 0m 0s) Loss: 0.2429(0.1305) 
+Epoch 2 Step 182 - avg_train_loss: 0.1107  avg_val_loss: 0.1265
+Epoch 2 Step 182 - Score: 0.5040
+Epoch: [2][200/366] Elapsed 3m 5s (remain 2m 32s) Loss: 0.1023(0.1096) 
+Epoch: [2][300/366] Elapsed 4m 16s (remain 0m 55s) Loss: 0.1014(0.1074) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 29s) Loss: 0.1266(0.1266) 
+EVAL: [61/62] Elapsed 0m 42s (remain 0m 0s) Loss: 0.1300(0.1169) 
+Epoch 2 Step 364 - avg_train_loss: 0.1101  avg_val_loss: 0.1136
+Epoch 2 Step 364 - Score: 0.4775
+Epoch: [2][365/366] Elapsed 5m 47s (remain 0m 0s) Loss: 0.1219(0.1075) 
+Epoch 2 - avg_train_loss: 0.1101  avg_val_loss: 0.1136  time: 348s
+Epoch 2 - Score: 0.4775
+Epoch: [3][0/366] Elapsed 0m 0s (remain 2m 36s) Loss: 0.0781(0.0781) 
+Epoch: [3][100/366] Elapsed 1m 12s (remain 3m 10s) Loss: 0.0772(0.0981) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 42s) Loss: 0.1063(0.1063) 
+EVAL: [61/62] Elapsed 0m 39s (remain 0m 0s) Loss: 0.2468(0.1331) 
+Epoch 3 Step 182 - avg_train_loss: 0.1009  avg_val_loss: 0.1281
+Epoch 3 Step 182 - Score: 0.5074
+Epoch: [3][200/366] Elapsed 3m 3s (remain 2m 30s) Loss: 0.0891(0.1002) 
+Epoch: [3][300/366] Elapsed 4m 14s (remain 0m 54s) Loss: 0.0934(0.0985) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 43s) Loss: 0.1165(0.1165) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.1122(0.1129) 
+Epoch 3 Step 364 - avg_train_loss: 0.1010  avg_val_loss: 0.1092
+Epoch 3 Step 364 - Score: 0.4680
+Epoch 3 Step 364 - Save Best Score: 0.4680 Model
+Epoch: [3][365/366] Elapsed 5m 45s (remain 0m 0s) Loss: 0.1112(0.0989) 
+Epoch 3 - avg_train_loss: 0.1010  avg_val_loss: 0.1092  time: 346s
+Epoch 3 - Score: 0.4680
+Epoch: [4][0/366] Elapsed 0m 0s (remain 4m 55s) Loss: 0.0785(0.0785) 
+Epoch: [4][100/366] Elapsed 1m 14s (remain 3m 16s) Loss: 0.0617(0.0924) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 41s) Loss: 0.0942(0.0942) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.2439(0.1338) 
+Epoch 4 Step 182 - avg_train_loss: 0.0940  avg_val_loss: 0.1280
+Epoch 4 Step 182 - Score: 0.5074
+Epoch: [4][200/366] Elapsed 3m 6s (remain 2m 33s) Loss: 0.0876(0.0936) 
+Epoch: [4][300/366] Elapsed 4m 18s (remain 0m 55s) Loss: 0.0870(0.0921) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 41s) Loss: 0.1064(0.1064) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.0941(0.1094) 
+Epoch 4 Step 364 - avg_train_loss: 0.0941  avg_val_loss: 0.1052
+Epoch 4 Step 364 - Score: 0.4591
+Epoch 4 Step 364 - Save Best Score: 0.4591 Model
+Epoch: [4][365/366] Elapsed 5m 52s (remain 0m 0s) Loss: 0.0987(0.0925) 
+Epoch 4 - avg_train_loss: 0.0941  avg_val_loss: 0.1052  time: 353s
+Epoch 4 - Score: 0.4591
+========== fold: 0 result ==========
+Score: 0.4591
+Running basic DDP example on rank 1.
+Running basic DDP example on rank 0.
+-------------fold:1 training-------------
+Epoch: [1][0/366] Elapsed 0m 0s (remain 4m 9s) Loss: 2.2352(2.2352) 
+Epoch: [1][100/366] Elapsed 1m 11s (remain 3m 7s) Loss: 0.0739(0.6652) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 40s) Loss: 0.0680(0.0680) 
+EVAL: [61/62] Elapsed 0m 38s (remain 0m 0s) Loss: 0.0537(0.1208) 
+Epoch 1 Step 182 - avg_train_loss: 0.4148  avg_val_loss: 0.1195
+Epoch 1 Step 182 - Score: 0.4904
+Epoch 1 Step 182 - Save Best Score: 0.4904 Model
+Epoch: [1][200/366] Elapsed 3m 4s (remain 2m 31s) Loss: 0.1244(0.3941) 
+Epoch: [1][300/366] Elapsed 4m 14s (remain 0m 54s) Loss: 0.1841(0.3045) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 43s) Loss: 0.0771(0.0771) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.0589(0.1178) 
+Epoch 1 Step 364 - avg_train_loss: 0.2667  avg_val_loss: 0.1164
+Epoch 1 Step 364 - Score: 0.4832
+Epoch 1 Step 364 - Save Best Score: 0.4832 Model
+Epoch: [1][365/366] Elapsed 5m 49s (remain 0m 0s) Loss: 0.1107(0.2705) 
+Epoch 1 - avg_train_loss: 0.2662  avg_val_loss: 0.1164  time: 349s
+Epoch 1 - Score: 0.4832
+Epoch: [2][0/366] Elapsed 0m 0s (remain 3m 25s) Loss: 0.0819(0.0819) 
+Epoch: [2][100/366] Elapsed 1m 11s (remain 3m 6s) Loss: 0.0762(0.1277) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 43s) Loss: 0.0680(0.0680) 
+EVAL: [61/62] Elapsed 0m 42s (remain 0m 0s) Loss: 0.0435(0.1123) 
+Epoch 2 Step 182 - avg_train_loss: 0.1159  avg_val_loss: 0.1108
+Epoch 2 Step 182 - Score: 0.4716
+Epoch 2 Step 182 - Save Best Score: 0.4716 Model
+Epoch: [2][200/366] Elapsed 3m 6s (remain 2m 32s) Loss: 0.1093(0.1172) 
+Epoch: [2][300/366] Elapsed 4m 18s (remain 0m 55s) Loss: 0.1751(0.1148) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 44s) Loss: 0.0772(0.0772) 
+EVAL: [61/62] Elapsed 0m 40s (remain 0m 0s) Loss: 0.0551(0.1125) 
+Epoch 2 Step 364 - avg_train_loss: 0.1107  avg_val_loss: 0.1112
+Epoch 2 Step 364 - Score: 0.4721
+Epoch: [2][365/366] Elapsed 5m 48s (remain 0m 0s) Loss: 0.1064(0.1127) 
+Epoch 2 - avg_train_loss: 0.1107  avg_val_loss: 0.1112  time: 349s
+Epoch 2 - Score: 0.4721
+Epoch: [3][0/366] Elapsed 0m 0s (remain 1m 57s) Loss: 0.0792(0.0792) 
+Epoch: [3][100/366] Elapsed 1m 12s (remain 3m 9s) Loss: 0.0655(0.1110) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 39s) Loss: 0.0723(0.0723) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.0402(0.1106) 
+Epoch 3 Step 182 - avg_train_loss: 0.1037  avg_val_loss: 0.1094
+Epoch 3 Step 182 - Score: 0.4684
+Epoch 3 Step 182 - Save Best Score: 0.4684 Model
+Epoch: [3][200/366] Elapsed 3m 9s (remain 2m 35s) Loss: 0.1028(0.1046) 
+Epoch: [3][300/366] Elapsed 4m 21s (remain 0m 56s) Loss: 0.1394(0.1035) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 19s) Loss: 0.0760(0.0760) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.0526(0.1100) 
+Epoch 3 Step 364 - avg_train_loss: 0.1010  avg_val_loss: 0.1088
+Epoch 3 Step 364 - Score: 0.4670
+Epoch 3 Step 364 - Save Best Score: 0.4670 Model
+Epoch: [3][365/366] Elapsed 5m 54s (remain 0m 0s) Loss: 0.1011(0.1023) 
+Epoch 3 - avg_train_loss: 0.1010  avg_val_loss: 0.1088  time: 355s
+Epoch 3 - Score: 0.4670
+Epoch: [4][0/366] Elapsed 0m 0s (remain 4m 38s) Loss: 0.0752(0.0752) 
+Epoch: [4][100/366] Elapsed 1m 13s (remain 3m 13s) Loss: 0.0581(0.1024) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 43s) Loss: 0.0766(0.0766) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.0447(0.1114) 
+Epoch 4 Step 182 - avg_train_loss: 0.0964  avg_val_loss: 0.1103
+Epoch 4 Step 182 - Score: 0.4703
+Epoch: [4][200/366] Elapsed 3m 8s (remain 2m 34s) Loss: 0.1013(0.0968) 
+Epoch: [4][300/366] Elapsed 4m 19s (remain 0m 56s) Loss: 0.1086(0.0959) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 37s) Loss: 0.0748(0.0748) 
+EVAL: [61/62] Elapsed 0m 41s (remain 0m 0s) Loss: 0.0530(0.1088) 
+Epoch 4 Step 364 - avg_train_loss: 0.0942  avg_val_loss: 0.1078
+Epoch 4 Step 364 - Score: 0.4649
+Epoch 4 Step 364 - Save Best Score: 0.4649 Model
+Epoch: [4][365/366] Elapsed 5m 53s (remain 0m 0s) Loss: 0.0952(0.0951) 
+Epoch 4 - avg_train_loss: 0.0942  avg_val_loss: 0.1078  time: 353s
+Epoch 4 - Score: 0.4649
+========== fold: 1 result ==========
+Score: 0.4649
+Running basic DDP example on rank 0.
+Running basic DDP example on rank 1.
+-------------fold:2 training-------------
+Epoch: [1][0/366] Elapsed 0m 1s (remain 7m 8s) Loss: 2.7175(2.7175) 
+Epoch: [1][100/366] Elapsed 1m 16s (remain 3m 20s) Loss: 0.0943(0.6610) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 33s) Loss: 0.1220(0.1220) 
+EVAL: [61/62] Elapsed 0m 36s (remain 0m 0s) Loss: 0.0991(0.1194) 
+Epoch 1 Step 182 - avg_train_loss: 0.4239  avg_val_loss: 0.1178
+Epoch 1 Step 182 - Score: 0.4881
+Epoch 1 Step 182 - Save Best Score: 0.4881 Model
+Epoch: [1][200/366] Elapsed 3m 6s (remain 2m 32s) Loss: 0.0491(0.3931) 
+Epoch: [1][300/366] Elapsed 4m 18s (remain 0m 55s) Loss: 0.1212(0.3016) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 55s) Loss: 0.1495(0.1495) 
+EVAL: [61/62] Elapsed 0m 36s (remain 0m 0s) Loss: 0.2549(0.1417) 
+Epoch 1 Step 364 - avg_train_loss: 0.2704  avg_val_loss: 0.1369
+Epoch 1 Step 364 - Score: 0.5262
+Epoch: [1][365/366] Elapsed 5m 44s (remain 0m 0s) Loss: 0.1108(0.2679) 
+Epoch 1 - avg_train_loss: 0.2700  avg_val_loss: 0.1369  time: 345s
+Epoch 1 - Score: 0.5262
+Epoch: [2][0/366] Elapsed 0m 0s (remain 5m 3s) Loss: 0.0763(0.0763) 
+Epoch: [2][100/366] Elapsed 1m 10s (remain 3m 4s) Loss: 0.0665(0.1165) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 57s) Loss: 0.1264(0.1264) 
+EVAL: [61/62] Elapsed 0m 38s (remain 0m 0s) Loss: 0.0788(0.1097) 
+Epoch 2 Step 182 - avg_train_loss: 0.1126  avg_val_loss: 0.1109
+Epoch 2 Step 182 - Score: 0.4729
+Epoch 2 Step 182 - Save Best Score: 0.4729 Model
+Epoch: [2][200/366] Elapsed 3m 6s (remain 2m 33s) Loss: 0.0380(0.1104) 
+Epoch: [2][300/366] Elapsed 4m 20s (remain 0m 56s) Loss: 0.1282(0.1084) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 57s) Loss: 0.1224(0.1224) 
+EVAL: [61/62] Elapsed 0m 39s (remain 0m 0s) Loss: 0.0815(0.1093) 
+Epoch 2 Step 364 - avg_train_loss: 0.1087  avg_val_loss: 0.1092
+Epoch 2 Step 364 - Score: 0.4689
+Epoch 2 Step 364 - Save Best Score: 0.4689 Model
+Epoch: [2][365/366] Elapsed 5m 51s (remain 0m 0s) Loss: 0.0890(0.1071) 
+Epoch 2 - avg_train_loss: 0.1087  avg_val_loss: 0.1092  time: 352s
+Epoch 2 - Score: 0.4689
+Epoch: [3][0/366] Elapsed 0m 0s (remain 4m 51s) Loss: 0.0436(0.0436) 
+Epoch: [3][100/366] Elapsed 1m 13s (remain 3m 12s) Loss: 0.0561(0.1009) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 56s) Loss: 0.1345(0.1345) 
+EVAL: [61/62] Elapsed 0m 40s (remain 0m 0s) Loss: 0.0352(0.1115) 
+Epoch 3 Step 182 - avg_train_loss: 0.1003  avg_val_loss: 0.1152
+Epoch 3 Step 182 - Score: 0.4822
+Epoch: [3][200/366] Elapsed 3m 4s (remain 2m 31s) Loss: 0.0377(0.0981) 
+Epoch: [3][300/366] Elapsed 4m 19s (remain 0m 56s) Loss: 0.1129(0.0979) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 56s) Loss: 0.1240(0.1240) 
+EVAL: [61/62] Elapsed 0m 37s (remain 0m 0s) Loss: 0.0586(0.1075) 
+Epoch 3 Step 364 - avg_train_loss: 0.0988  avg_val_loss: 0.1084
+Epoch 3 Step 364 - Score: 0.4670
+Epoch 3 Step 364 - Save Best Score: 0.4670 Model
+Epoch: [3][365/366] Elapsed 5m 48s (remain 0m 0s) Loss: 0.0845(0.0976) 
+Epoch 3 - avg_train_loss: 0.0988  avg_val_loss: 0.1084  time: 349s
+Epoch 3 - Score: 0.4670
+Epoch: [4][0/366] Elapsed 0m 0s (remain 5m 7s) Loss: 0.0441(0.0441) 
+Epoch: [4][100/366] Elapsed 1m 11s (remain 3m 6s) Loss: 0.0511(0.0933) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 33s) Loss: 0.1360(0.1360) 
+EVAL: [61/62] Elapsed 0m 39s (remain 0m 0s) Loss: 0.0229(0.1123) 
+Epoch 4 Step 182 - avg_train_loss: 0.0923  avg_val_loss: 0.1166
+Epoch 4 Step 182 - Score: 0.4852
+Epoch: [4][200/366] Elapsed 3m 2s (remain 2m 30s) Loss: 0.0356(0.0904) 
+Epoch: [4][300/366] Elapsed 4m 14s (remain 0m 55s) Loss: 0.1019(0.0906) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 35s) Loss: 0.1249(0.1249) 
+EVAL: [61/62] Elapsed 0m 36s (remain 0m 0s) Loss: 0.0453(0.1074) 
+Epoch 4 Step 364 - avg_train_loss: 0.0915  avg_val_loss: 0.1082
+Epoch 4 Step 364 - Score: 0.4665
+Epoch 4 Step 364 - Save Best Score: 0.4665 Model
+Epoch: [4][365/366] Elapsed 5m 44s (remain 0m 0s) Loss: 0.0779(0.0908) 
+Epoch 4 - avg_train_loss: 0.0915  avg_val_loss: 0.1082  time: 345s
+Epoch 4 - Score: 0.4665
+========== fold: 2 result ==========
+Score: 0.4665
+Running basic DDP example on rank 0.
+Running basic DDP example on rank 1.
+-------------fold:3 training-------------
+Epoch: [1][0/366] Elapsed 0m 1s (remain 7m 7s) Loss: 2.7066(2.7066) 
+Epoch: [1][100/366] Elapsed 1m 12s (remain 3m 9s) Loss: 0.1602(0.6310) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 51s) Loss: 0.1201(0.1201) 
+EVAL: [61/62] Elapsed 0m 40s (remain 0m 0s) Loss: 0.2365(0.1202) 
+Epoch 1 Step 182 - avg_train_loss: 0.4047  avg_val_loss: 0.1216
+Epoch 1 Step 182 - Score: 0.4940
+Epoch 1 Step 182 - Save Best Score: 0.4940 Model
+Epoch: [1][200/366] Elapsed 3m 4s (remain 2m 31s) Loss: 0.0797(0.3797) 
+Epoch: [1][300/366] Elapsed 4m 17s (remain 0m 55s) Loss: 0.0627(0.2918) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 24s) Loss: 0.1362(0.1362) 
+EVAL: [61/62] Elapsed 0m 37s (remain 0m 0s) Loss: 0.0889(0.1077) 
+Epoch 1 Step 364 - avg_train_loss: 0.2614  avg_val_loss: 0.1096
+Epoch 1 Step 364 - Score: 0.4695
+Epoch 1 Step 364 - Save Best Score: 0.4695 Model
+Epoch: [1][365/366] Elapsed 5m 47s (remain 0m 0s) Loss: 0.0905(0.2606) 
+Epoch 1 - avg_train_loss: 0.2610  avg_val_loss: 0.1096  time: 348s
+Epoch 1 - Score: 0.4695
+Epoch: [2][0/366] Elapsed 0m 0s (remain 3m 33s) Loss: 0.0597(0.0597) 
+Epoch: [2][100/366] Elapsed 1m 11s (remain 3m 8s) Loss: 0.1348(0.1123) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 45s) Loss: 0.1280(0.1280) 
+EVAL: [61/62] Elapsed 0m 40s (remain 0m 0s) Loss: 0.1677(0.1083) 
+Epoch 2 Step 182 - avg_train_loss: 0.1128  avg_val_loss: 0.1102
+Epoch 2 Step 182 - Score: 0.4701
+Epoch: [2][200/366] Elapsed 3m 4s (remain 2m 31s) Loss: 0.0482(0.1121) 
+Epoch: [2][300/366] Elapsed 4m 19s (remain 0m 56s) Loss: 0.0614(0.1093) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 49s) Loss: 0.1200(0.1200) 
+EVAL: [61/62] Elapsed 0m 38s (remain 0m 0s) Loss: 0.0832(0.1043) 
+Epoch 2 Step 364 - avg_train_loss: 0.1094  avg_val_loss: 0.1050
+Epoch 2 Step 364 - Score: 0.4594
+Epoch 2 Step 364 - Save Best Score: 0.4594 Model
+Epoch: [2][365/366] Elapsed 5m 50s (remain 0m 0s) Loss: 0.1021(0.1088) 
+Epoch 2 - avg_train_loss: 0.1094  avg_val_loss: 0.1050  time: 350s
+Epoch 2 - Score: 0.4594
+Epoch: [3][0/366] Elapsed 0m 0s (remain 3m 20s) Loss: 0.0643(0.0643) 
+Epoch: [3][100/366] Elapsed 1m 13s (remain 3m 11s) Loss: 0.1173(0.1037) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 22s) Loss: 0.1662(0.1662) 
+EVAL: [61/62] Elapsed 0m 39s (remain 0m 0s) Loss: 0.1398(0.1092) 
+Epoch 3 Step 182 - avg_train_loss: 0.1052  avg_val_loss: 0.1132
+Epoch 3 Step 182 - Score: 0.4767
+Epoch: [3][200/366] Elapsed 3m 6s (remain 2m 32s) Loss: 0.0471(0.1062) 
+Epoch: [3][300/366] Elapsed 4m 20s (remain 0m 56s) Loss: 0.0669(0.1033) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 24s) Loss: 0.1255(0.1255) 
+EVAL: [61/62] Elapsed 0m 38s (remain 0m 0s) Loss: 0.0836(0.1024) 
+Epoch 3 Step 364 - avg_train_loss: 0.1022  avg_val_loss: 0.1035
+Epoch 3 Step 364 - Score: 0.4560
+Epoch 3 Step 364 - Save Best Score: 0.4560 Model
+Epoch: [3][365/366] Elapsed 5m 51s (remain 0m 0s) Loss: 0.0930(0.1028) 
+Epoch 3 - avg_train_loss: 0.1022  avg_val_loss: 0.1035  time: 352s
+Epoch 3 - Score: 0.4560
+Epoch: [4][0/366] Elapsed 0m 0s (remain 3m 18s) Loss: 0.0659(0.0659) 
+Epoch: [4][100/366] Elapsed 1m 12s (remain 3m 9s) Loss: 0.1050(0.0997) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 51s) Loss: 0.1958(0.1958) 
+EVAL: [61/62] Elapsed 0m 38s (remain 0m 0s) Loss: 0.1308(0.1187) 
+Epoch 4 Step 182 - avg_train_loss: 0.1001  avg_val_loss: 0.1238
+Epoch 4 Step 182 - Score: 0.4995
+Epoch: [4][200/366] Elapsed 3m 1s (remain 2m 29s) Loss: 0.0509(0.1020) 
+Epoch: [4][300/366] Elapsed 4m 14s (remain 0m 55s) Loss: 0.0777(0.0987) 
+EVAL: [0/62] Elapsed 0m 0s (remain 0m 49s) Loss: 0.1446(0.1446) 
+EVAL: [61/62] Elapsed 0m 38s (remain 0m 0s) Loss: 0.0655(0.1015) 
+Epoch 4 Step 364 - avg_train_loss: 0.0970  avg_val_loss: 0.1040
+Epoch 4 Step 364 - Score: 0.4571
+Epoch: [4][365/366] Elapsed 5m 44s (remain 0m 0s) Loss: 0.0779(0.0977) 
+Epoch 4 - avg_train_loss: 0.0970  avg_val_loss: 0.1040  time: 345s
+Epoch 4 - Score: 0.4571
+========== fold: 3 result ==========
+Score: 0.4560
+========== CV ==========
+Score: 0.4617
