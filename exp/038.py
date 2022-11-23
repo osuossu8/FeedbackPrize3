@@ -56,17 +56,17 @@ class CFG:
     train = True
     sync_bn = True
     n_gpu = 2
-    seed = 38 # 2022
-    model = 'microsoft/deberta-v3-large'
+    seed = 77 # 38 # 2022
+    model = 'microsoft/deberta-v3-base' # 'microsoft/deberta-v3-large'
     n_splits = 5
-    max_len = 1536
+    max_len = 1500 # 1536
     targets = ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 732 # 780 # * 2
+    eval_freq = 366 # 732 # 780 # * 2
     scheduler = 'cosine'
-    batch_size = 1
+    batch_size = 2 # 1
     num_workers = 0
     lr = 5e-6
     weigth_decay = 0.01
@@ -77,8 +77,8 @@ class CFG:
     n_fold = 4 # 5
     trn_fold = [i for i in range(n_fold)]
     freezing = True
-    gradient_checkpoint = True
-    reinit_layers = 1
+    gradient_checkpoint = False
+    reinit_layers = 0
     tokenizer = AutoTokenizer.from_pretrained(model)
 
 
@@ -102,6 +102,7 @@ def cleanup_ddp():
 
 def setup_tokenizer(CFG):
     CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
+    #CFG.tokenizer.add_tokens([f"\r"], special_tokens=True)
     #CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
     #CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
 
@@ -208,14 +209,14 @@ class FeedBackModel(nn.Module):
             freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
-        # if self.cfg.gradient_checkpoint:
-        #     self.model.gradient_checkpointing_enable() 
+        if self.cfg.gradient_checkpoint:
+            self.model.gradient_checkpointing_enable() 
 
-        # if self.cfg.reinit_layers > 0:
-        #     layers = self.model.encoder.layer[-self.cfg.reinit_layers:]
-        #     for layer in layers:
-        #         for module in layer.modules():
-        #             self._init_weights(module)
+        if self.cfg.reinit_layers > 0:
+            layers = self.model.encoder.layer[-self.cfg.reinit_layers:]
+            for layer in layers:
+                for module in layer.modules():
+                    self._init_weights(module)
 
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):
@@ -354,7 +355,7 @@ def train_one_epoch(rank, model, optimizer, scheduler, dataloader, valid_dataloa
                                 'predictions': pred},
                                 OUTPUT_DIR+f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth")
 
-                model.train()
+                # model.train()
 
     gc.collect()
 
@@ -470,7 +471,46 @@ def train_loop(rank, CFG, fold, return_dict):
     if CFG.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
-    optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
+    # 12層のモデル想定、3つのグループに分けて lr を低レイヤに行くほど小さくする
+    group1 = ['layer.0.', 'layer.1.', 'layer.2.', 'layer.3.']
+    group2 = ['layer.4.', 'layer.5.', 'layer.6.', 'layer.7.']
+    group3 = ['layer.8.', 'layer.9.', 'layer.10.', 'layer.11.']
+    group_all = [
+       'layer.0.', 'layer.1.', 'layer.2.', 'layer.3.',
+       'layer.4.', 'layer.5.', 'layer.6.', 'layer.7.',
+       'layer.8.', 'layer.9.', 'layer.10.', 'layer.11.'
+    ]
+    optimizer_parameters = []
+    optimizer_parameters.append({
+        'params': [
+            p for n, p in model.module.named_parameters()
+            if not any(nd in n for nd in group_all)
+        ]
+    })
+    optimizer_parameters.append({
+        'params': [
+            p for n, p in model.module.named_parameters()
+            if any(nd in n for nd in group1)
+        ],
+        'lr': CFG.lr
+    })
+    optimizer_parameters.append({
+        'params': [
+            p for n, p in model.module.named_parameters()
+            if any(nd in n for nd in group2)
+        ],
+        'lr': CFG.lr * 1.25 # 2.5
+    })
+    optimizer_parameters.append({
+        'params': [
+            p for n, p in model.module.named_parameters()
+            if any(nd in n for nd in group3)
+        ],
+        'lr': CFG.lr * 2.5 # 5.0
+    })
+
+    optimizer = optim.AdamW(optimizer_parameters, lr=CFG.lr, weight_decay=CFG.weigth_decay)
+    # optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
     num_train_steps = int(len(train_dataset) / CFG.batch_size * CFG.epochs)
     scheduler = get_scheduler(CFG, optimizer, num_train_steps)
 
