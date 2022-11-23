@@ -51,13 +51,13 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 class CFG:
     EXP_ID = '040'
-    debug = False
+    debug = True # False
     apex = True
     train = True
     sync_bn = True
     n_gpu = 2
-    seed = 777  # 42 # 77 # 38 # 2022
-    model = 'microsoft/deberta-v3-large'
+    seed = 777
+    # model = 'microsoft/deberta-v3-large'
     n_splits = 5
     max_len = 1024 # 1536
     targets = ["cohesion", "syntax", "vocabulary", "phraseology", "grammar", "conventions"]
@@ -66,20 +66,20 @@ class CFG:
     print_freq = 100
     eval_freq = 182 # 366 # 732 # 780 # * 2
     scheduler = 'linear' # 'cosine'
-    batch_size = 2
+    batch_size = 1
     num_workers = 0
     lr = 5e-6
     weigth_decay = 0.01
     min_lr = 1e-6
     num_warmup_steps = 0
     num_cycles=0.5
-    epochs = 5 # 4
+    epochs = 1
     n_fold = 4 # 5
     trn_fold = [i for i in range(n_fold)]
     freezing = True
     gradient_checkpoint = False
     reinit_layers = 0
-    tokenizer = AutoTokenizer.from_pretrained(model)
+    # tokenizer = AutoTokenizer.from_pretrained(model)
 
 
 LOGGER = init_logger(log_file='log/' + f"{CFG.EXP_ID}.log")
@@ -100,20 +100,8 @@ def cleanup_ddp():
     dist.destroy_process_group()
 
 
-def preprocess(texts):
-    texts = (
-        texts
-        .str.replace(r'\r\n', '<newline>', regex=True)
-        .str.replace(r'\n', '<newline>', regex=True)
-        .str.replace('<newline><newline>', '<newline>', regex=False)
-        .values
-    )
-    return texts
-
-
 def setup_tokenizer(CFG):
-    CFG.tokenizer.add_tokens([f"<newline>"], special_tokens=True)
-    # CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
+    CFG.tokenizer.add_tokens([f"\n"], special_tokens=True)
     #CFG.tokenizer.add_tokens([f"\r"], special_tokens=True)
     #CFG.tokenizer.add_tokens([f"[START]"], special_tokens=True)
     #CFG.tokenizer.add_tokens([f"[END]"], special_tokens=True)
@@ -198,6 +186,16 @@ def freeze(module):
         parameter.requires_grad = False
 
 
+def mean_pooling(model_output, attention_mask):
+    token_embeddings = model_output.detach()
+    input_mask_expanded = (
+        attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    )
+    return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(
+        input_mask_expanded.sum(1), min=1e-9
+    )
+
+
 class FeedBackModel(nn.Module):
     def __init__(self, model_name):
         super(FeedBackModel, self).__init__()
@@ -216,19 +214,19 @@ class FeedBackModel(nn.Module):
 
 
         # Freeze
-        if self.cfg.freezing:
-            freeze(self.model.embeddings)
-            freeze(self.model.encoder.layer[:2])
+        #if self.cfg.freezing:
+        #    freeze(self.model.embeddings)
+        #    freeze(self.model.encoder.layer[:2])
 
         # Gradient Checkpointing
-        if self.cfg.gradient_checkpoint:
-            self.model.gradient_checkpointing_enable() 
+        #if self.cfg.gradient_checkpoint:
+        #    self.model.gradient_checkpointing_enable() 
 
-        if self.cfg.reinit_layers > 0:
-            layers = self.model.encoder.layer[-self.cfg.reinit_layers:]
-            for layer in layers:
-                for module in layer.modules():
-                    self._init_weights(module)
+        #if self.cfg.reinit_layers > 0:
+        #    layers = self.model.encoder.layer[-self.cfg.reinit_layers:]
+        #    for layer in layers:
+        #        for module in layer.modules():
+        #            self._init_weights(module)
 
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):
@@ -254,7 +252,7 @@ class FeedBackModel(nn.Module):
 
         logits = self.output(sequence_output)
 
-        return logits, F.normalize(sequence_output, p=2, dim=1)
+        return logits, transformer_out[0]
 
 
 
@@ -404,7 +402,10 @@ def valid_one_epoch(rank, model, dataloader, valid_dataset, epoch):
         loss = criterion(outputs, targets)
 
         losses.update(loss.item(), batch_size)
-        preds.append(outputs.detach()) # keep preds on GPU
+        preds.append(outputs.detach()) # keep preds on GPUa
+
+        embedding_outputs = mean_pooling(embedding_outputs, mask)
+        embedding_outputs = F.normalize(embedding_outputs, p=2, dim=1)
         embs.append(embedding_outputs.detach())
 
         end = time.time()
@@ -463,7 +464,7 @@ def train_loop(rank, CFG, fold, return_dict):
     for i,(train_index, val_index) in enumerate(skf.split(train,train[CFG.targets])):
         train.loc[val_index,'kfold'] = i
 
-    train['full_text'] = preprocess(train['full_text'])
+    # train['full_text'] = preprocess(train['full_text'])
 
     if CFG.debug:
         train = train.sample(n=128)
@@ -485,7 +486,7 @@ def train_loop(rank, CFG, fold, return_dict):
     valid_dataloader = DataLoader(valid_dataset, batch_size=CFG.batch_size * 2, sampler=valid_sampler, pin_memory=True, drop_last=False)
 
     model = FeedBackModel(CFG.model)
-    torch.save(model.config, OUTPUT_DIR+'config.pth')
+    # torch.save(model.config, OUTPUT_DIR+'config.pth')
     model = model.to(rank)
     model = DDP(model, device_ids=[rank])
 
@@ -493,46 +494,7 @@ def train_loop(rank, CFG, fold, return_dict):
     if CFG.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
-    # 12層のモデル想定、3つのグループに分けて lr を低レイヤに行くほど小さくする
-    group1 = ['layer.0.', 'layer.1.', 'layer.2.', 'layer.3.']
-    group2 = ['layer.4.', 'layer.5.', 'layer.6.', 'layer.7.']
-    group3 = ['layer.8.', 'layer.9.', 'layer.10.', 'layer.11.']
-    group_all = [
-       'layer.0.', 'layer.1.', 'layer.2.', 'layer.3.',
-       'layer.4.', 'layer.5.', 'layer.6.', 'layer.7.',
-       'layer.8.', 'layer.9.', 'layer.10.', 'layer.11.'
-    ]
-    optimizer_parameters = []
-    optimizer_parameters.append({
-        'params': [
-            p for n, p in model.module.named_parameters()
-            if not any(nd in n for nd in group_all)
-        ]
-    })
-    optimizer_parameters.append({
-        'params': [
-            p for n, p in model.module.named_parameters()
-            if any(nd in n for nd in group1)
-        ],
-        'lr': CFG.lr
-    })
-    optimizer_parameters.append({
-        'params': [
-            p for n, p in model.module.named_parameters()
-            if any(nd in n for nd in group2)
-        ],
-        'lr': CFG.lr * 1.25 # 2.5
-    })
-    optimizer_parameters.append({
-        'params': [
-            p for n, p in model.module.named_parameters()
-            if any(nd in n for nd in group3)
-        ],
-        'lr': CFG.lr * 2.5 # 5.0
-    })
-
-    optimizer = optim.AdamW(optimizer_parameters, lr=CFG.lr, weight_decay=CFG.weigth_decay)
-    # optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
+    optimizer = optim.AdamW(model.parameters(), lr=CFG.lr, weight_decay=CFG.weigth_decay)
     num_train_steps = int(len(train_dataset) / CFG.batch_size * CFG.epochs)
     scheduler = get_scheduler(CFG, optimizer, num_train_steps)
 
@@ -596,19 +558,35 @@ def main():
     if torch.cuda.device_count() > 1:
         LOGGER.info(f"We have available {torch.cuda.device_count()}, GPUs! but using {CFG.n_gpu} GPUs")
 
-    if CFG.train:
-        oof_df = pd.DataFrame()
-        for fold in range(CFG.n_fold):
-            mp.spawn(train_loop, args=(CFG, fold, return_dict), nprocs=CFG.n_gpu, join=True)
-            _oof_df = return_dict[fold]
-            oof_df = pd.concat([oof_df, _oof_df])
-            LOGGER.info(f"========== fold: {fold} result ==========")
-            get_result(_oof_df)
+    model_list = [
+        'microsoft/deberta-v3-large',
+        'microsoft/deberta-v3-base',
+        'microsoft/deberta-v3-xsmall',
+        'microsoft/deberta-v3-small',
+        'microsoft/deberta-large-mnli',
+        'microsoft/deberta-base-mnli',
+        'microsoft/deberta-large',
+        'microsoft/deberta-base',
+    ]
 
-        oof_df = oof_df.reset_index(drop=True)
-        LOGGER.info(f"========== CV ==========")
-        get_result(oof_df)
-        oof_df.to_csv(OUTPUT_DIR+f'oof_df.csv', index=False)
+    for model in tqdm(model_list):
+        CFG.model = model
+        CFG.tokenizer = AutoTokenizer.from_pretrained(model)
+        setup_tokenizer(CFG)
+
+        if CFG.train:
+            oof_df = pd.DataFrame()
+            for fold in range(CFG.n_fold):
+                mp.spawn(train_loop, args=(CFG, fold, return_dict), nprocs=CFG.n_gpu, join=True)
+                _oof_df = return_dict[fold]
+                oof_df = pd.concat([oof_df, _oof_df])
+                LOGGER.info(f"========== fold: {fold} result ==========")
+                get_result(_oof_df)
+
+            oof_df = oof_df.reset_index(drop=True)
+            LOGGER.info(f"========== CV ==========")
+            get_result(oof_df)
+            oof_df.to_csv(OUTPUT_DIR+f"oof_df_CFG.model.replace('/', '-').csv", index=False)
 
 
 if __name__=="__main__":
