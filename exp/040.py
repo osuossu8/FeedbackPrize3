@@ -555,10 +555,10 @@ if __name__=="__main__":
         'microsoft/deberta-v3-base',
         'microsoft/deberta-v3-xsmall',
         'microsoft/deberta-v3-small',
-        'microsoft/deberta-large-mnli',
-        'microsoft/deberta-base-mnli',
-        'microsoft/deberta-large',
-        'microsoft/deberta-base',
+        #'microsoft/deberta-large-mnli',
+        #'microsoft/deberta-base-mnli',
+        #'microsoft/deberta-large',
+        #'microsoft/deberta-base',
     ]
 
     for model_name in tqdm(model_list):
