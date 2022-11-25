@@ -123,25 +123,61 @@ def mean_pooling(model_output, attention_mask):
     )
 
 
-BATCH_SIZE = 2 # 4
+BATCH_SIZE = 4
+tokenizer = None
+MAX_LEN = 640
 
 class EmbedDataset(torch.utils.data.Dataset):
     def __init__(self,df):
         self.df = df.reset_index(drop=True)
+        self.tokenizer = tokenizer
+        self.max_len = MAX_LEN
     def __len__(self):
         return len(self.df)
+    def cut_head_and_tail(self, text):
+        input_ids = self.tokenizer.encode(text)
+        n_token = len(input_ids)
+
+        if n_token == self.max_len:
+            input_ids = input_ids
+            attention_mask = [1 for _ in range(self.max_len)]
+            token_type_ids = [1 for _ in range(self.max_len)]
+        elif n_token < self.max_len:
+            pad = [1 for _ in range(self.max_len-n_token)]
+            input_ids = input_ids + pad
+            attention_mask = [1 if n_token > i else 0 for i in range(self.max_len)]
+            token_type_ids = [1 if n_token > i else 0 for i in range(self.max_len)]
+        else:
+            harf_len = (self.max_len-2)//2
+            _input_ids = input_ids[1:-1]
+            input_ids = [0]+ _input_ids[:harf_len] + _input_ids[-harf_len:] + [2]
+            attention_mask = [1 for _ in range(self.max_len)]
+            token_type_ids = [1 for _ in range(self.max_len)]
+
+            if len(input_ids) < self.max_len:
+                diff = self.max_len - len(input_ids)
+                input_ids = [0]+ _input_ids[:harf_len] + _input_ids[-(harf_len+diff):] + [2]
+
+        d = {
+            "input_ids": torch.tensor(input_ids, dtype=torch.long),
+            "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
+            "token_type_ids": torch.tensor(token_type_ids, dtype=torch.long),
+        }
+        return d
     def __getitem__(self,idx):
         text = self.df.loc[idx,"full_text"]
-        tokens = tokenizer(
-                text,
-                None,
-                add_special_tokens=True,
-                padding='max_length',
-                truncation=True,
-                max_length=MAX_LEN,return_tensors="pt")
+        #tokens = tokenizer(
+        #        text,
+        #        None,
+        #        add_special_tokens=True,
+        #        padding='max_length',
+        #        truncation=True,
+        #        max_length=MAX_LEN,return_tensors="pt")
+        tokens = self.cut_head_and_tail(text)
         tokens = {k:v.squeeze(0) for k,v in tokens.items()}
         return tokens
 
+"""
 ds_tr = EmbedDataset(dftr)
 embed_dataloader_tr = torch.utils.data.DataLoader(ds_tr,\
                         batch_size=BATCH_SIZE,\
@@ -150,10 +186,10 @@ ds_te = EmbedDataset(dfte)
 embed_dataloader_te = torch.utils.data.DataLoader(ds_te,\
                         batch_size=BATCH_SIZE,\
                         shuffle=False)
-
+"""
 
 tokenizer = None
-MAX_LEN = 1024 # 640
+MAX_LEN = 640
 
 def get_embeddings(MODEL_NM='', MAX=640, BATCH_SIZE=4, verbose=True):
     global tokenizer, MAX_LEN
@@ -161,6 +197,15 @@ def get_embeddings(MODEL_NM='', MAX=640, BATCH_SIZE=4, verbose=True):
     model = AutoModel.from_pretrained( MODEL_NM )
     tokenizer = AutoTokenizer.from_pretrained( MODEL_NM )
     MAX_LEN = MAX
+
+    ds_tr = EmbedDataset(dftr)
+    embed_dataloader_tr = torch.utils.data.DataLoader(ds_tr,\
+                        batch_size=BATCH_SIZE,\
+                        shuffle=False)
+    ds_te = EmbedDataset(dfte)
+    embed_dataloader_te = torch.utils.data.DataLoader(ds_te,\
+                        batch_size=BATCH_SIZE,\
+                        shuffle=False)
 
     model = model.to(DEVICE)
     model.eval()
