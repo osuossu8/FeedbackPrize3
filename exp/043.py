@@ -241,7 +241,7 @@ def get_embeddings(MODEL_NM='', MAX=640, BATCH_SIZE=4, verbose=True):
 
     return all_train_text_feats, te_text_feats
 
-
+"""
 MODEL_NM = 'microsoft/deberta-base'
 #MODEL_NM = '../input/huggingface-deberta-variants/deberta-base/deberta-base'
 all_train_text_feats, te_text_feats = get_embeddings(MODEL_NM)
@@ -266,11 +266,28 @@ MODEL_NM = 'microsoft/deberta-xlarge'
 #MODEL_NM = '../input/huggingface-deberta-variants/deberta-xlarge/deberta-xlarge'
 all_train_text_feats5, te_text_feats5 = get_embeddings(MODEL_NM, MAX=512)
 to_pickle(OUTPUT_DIR+f'{MODEL_NM.replace("/", "-")}_train_text_feats.pkl', all_train_text_feats5)
+"""
+#"""
+MODEL_NM = 'microsoft/deberta-base'
+all_train_text_feats = unpickle(OUTPUT_DIR+f'{MODEL_NM.replace("/", "-")}_train_text_feats.pkl')
+
+MODEL_NM = 'microsoft/deberta-v3-large'
+all_train_text_feats2 = unpickle(OUTPUT_DIR+f'{MODEL_NM.replace("/", "-")}_train_text_feats.pkl')
+
+MODEL_NM = 'microsoft/deberta-large'
+all_train_text_feats3 = unpickle(OUTPUT_DIR+f'{MODEL_NM.replace("/", "-")}_train_text_feats.pkl')
+
+MODEL_NM = 'microsoft/deberta-large-mnli'
+all_train_text_feats4 = unpickle(OUTPUT_DIR+f'{MODEL_NM.replace("/", "-")}_train_text_feats.pkl')
+
+MODEL_NM = 'microsoft/deberta-xlarge'
+all_train_text_feats5 = unpickle(OUTPUT_DIR+f'{MODEL_NM.replace("/", "-")}_train_text_feats.pkl')
+#"""
 
 all_train_text_feats = np.concatenate([all_train_text_feats,all_train_text_feats2,
                                        all_train_text_feats3,all_train_text_feats4,
                                        all_train_text_feats5],axis=1)
-
+"""
 te_text_feats = np.concatenate([te_text_feats,te_text_feats2,
                                 te_text_feats3,te_text_feats4,
                                 te_text_feats5],axis=1)
@@ -280,7 +297,7 @@ del all_train_text_feats3, te_text_feats3
 del all_train_text_feats4, te_text_feats4
 del all_train_text_feats5, te_text_feats5
 gc.collect()
-
+"""
 print('Our concatenated embeddings have shape', all_train_text_feats.shape )
 
 from cuml.svm import SVR
@@ -289,6 +306,8 @@ print('RAPIDS version',cuml.__version__)
 
 
 from sklearn.metrics import mean_squared_error
+from sklearn.multioutput import MultiOutputRegressor
+
 
 preds = []
 scores = []
@@ -305,7 +324,7 @@ fold_list = []
 #for fold in tqdm(range(FOLDS),total=FOLDS):
 for fold in range(FOLDS):
     print('#'*25)
-    print('### Fold',fold+1)
+    print('### Fold',fold)
     print('#'*25)
 
     dftr_ = dftr[dftr["FOLD"]!=fold]
@@ -315,26 +334,30 @@ for fold in range(FOLDS):
     ev_text_feats = all_train_text_feats[list(dfev_.index),:]
 
     ev_preds = np.zeros((len(ev_text_feats),6))
-    test_preds = np.zeros((len(te_text_feats),6))
-    for i,t in enumerate(target_cols):
-        print(t,', ',end='')
-        clf = SVR(C=1)
-        clf.fit(tr_text_feats, dftr_[t].values)
-        ev_preds[:,i] = clf.predict(ev_text_feats)
-        test_preds[:,i] = clf.predict(te_text_feats)
+    ## test_preds = np.zeros((len(te_text_feats),6))
+    # for i,t in enumerate(target_cols):
+    #     print(t,', ',end='')
+    clf = SVR(C=1)
+    clf = MultiOutputRegressor(clf)
+    # clf.fit(tr_text_feats, dftr_[t].values)
+    clf.fit(tr_text_feats, dftr_[target_cols].values)
+    ev_preds = clf.predict(ev_text_feats)
+    ## test_preds = clf.predict(te_text_feats)
     print()
     score = comp_score(dfev_[target_cols].values,ev_preds)
     scores.append(score)
+
+    to_pickle(OUTPUT_DIR+f'chris_svr_fold{fold}.pkl', clf)
 
     id_list.append(dfev_['text_id'].values)
     oof_list.append(ev_preds)
     fold_list.append(dfev_['FOLD'].values)
 
     print("Fold : {} RSME score: {}".format(fold,score))
-    preds.append(test_preds)
+    ## preds.append(test_preds)
 
 print('#'*25)
-print('Overall CV RSME =',np.mean(scores))
+print(f'Overall CV RSME = {np.mean(scores)}')
 
 oof_df = pd.DataFrame()
 oof_df['text_id'] = np.concatenate(id_list, 0)
