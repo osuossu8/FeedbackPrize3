@@ -1,0 +1,622 @@
+We have available 2, GPUs! but using 2 GPUs
+Running basic DDP example on rank 1.
+Running basic DDP example on rank 0.
+-------------fold:0 training-------------
+Epoch: [1][0/1564] Elapsed 0m 1s (remain 41m 49s) Loss: 9.0294(9.0294) 
+Epoch: [1][100/1564] Elapsed 1m 54s (remain 27m 44s) Loss: 0.2572(2.1294) 
+Epoch: [1][200/1564] Elapsed 3m 49s (remain 25m 59s) Loss: 0.2663(1.2075) 
+Epoch: [1][300/1564] Elapsed 5m 46s (remain 24m 12s) Loss: 0.5058(0.8951) 
+Epoch: [1][400/1564] Elapsed 7m 39s (remain 22m 13s) Loss: 0.4974(0.7422) 
+Epoch: [1][500/1564] Elapsed 9m 31s (remain 20m 13s) Loss: 0.3237(0.6433) 
+Epoch: [1][600/1564] Elapsed 11m 27s (remain 18m 22s) Loss: 0.1747(0.5730) 
+Epoch: [1][700/1564] Elapsed 13m 23s (remain 16m 29s) Loss: 0.7904(0.5245) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 6s) Loss: 0.2504(0.2504) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 43s) Loss: 0.0628(0.2113) 
+EVAL: [195/196] Elapsed 1m 35s (remain 0m 0s) Loss: 0.1370(0.2266) 
+Epoch 1 Step 780 - avg_train_loss: 0.4838  avg_val_loss: 0.2266
+Epoch 1 Step 780 - Score: 0.4756
+Epoch 1 Step 780 - Save Best Score: 0.4756 Model
+Epoch: [1][800/1564] Elapsed 16m 56s (remain 16m 7s) Loss: 0.0577(0.4897) 
+Epoch: [1][900/1564] Elapsed 18m 49s (remain 13m 51s) Loss: 0.1365(0.4618) 
+Epoch: [1][1000/1564] Elapsed 20m 45s (remain 11m 40s) Loss: 0.2906(0.4363) 
+Epoch: [1][1100/1564] Elapsed 22m 44s (remain 9m 33s) Loss: 0.2920(0.4190) 
+Epoch: [1][1200/1564] Elapsed 24m 41s (remain 7m 27s) Loss: 0.4036(0.4072) 
+Epoch: [1][1300/1564] Elapsed 26m 39s (remain 5m 23s) Loss: 0.2272(0.3938) 
+Epoch: [1][1400/1564] Elapsed 28m 35s (remain 3m 19s) Loss: 0.2144(0.3809) 
+Epoch: [1][1500/1564] Elapsed 30m 31s (remain 1m 16s) Loss: 0.4660(0.3728) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.2609(0.2609) 
+EVAL: [100/196] Elapsed 0m 45s (remain 0m 42s) Loss: 0.0995(0.2132) 
+EVAL: [195/196] Elapsed 1m 34s (remain 0m 0s) Loss: 0.1173(0.2364) 
+Epoch 1 Step 1560 - avg_train_loss: 0.3596  avg_val_loss: 0.2389
+Epoch 1 Step 1560 - Score: 0.4864
+Epoch: [1][1563/1564] Elapsed 33m 20s (remain 0m 0s) Loss: 0.0839(0.3672) 
+Epoch 1 - avg_train_loss: 0.3594  avg_val_loss: 0.2389  time: 2001s
+Epoch 1 - Score: 0.4864
+Epoch: [2][0/1564] Elapsed 0m 1s (remain 33m 50s) Loss: 0.2896(0.2896) 
+Epoch: [2][100/1564] Elapsed 1m 57s (remain 28m 23s) Loss: 0.2289(0.2231) 
+Epoch: [2][200/1564] Elapsed 3m 55s (remain 26m 37s) Loss: 0.2351(0.2132) 
+Epoch: [2][300/1564] Elapsed 5m 54s (remain 24m 48s) Loss: 0.4644(0.2123) 
+Epoch: [2][400/1564] Elapsed 7m 52s (remain 22m 51s) Loss: 0.4584(0.2128) 
+Epoch: [2][500/1564] Elapsed 9m 47s (remain 20m 47s) Loss: 0.1898(0.2076) 
+Epoch: [2][600/1564] Elapsed 11m 45s (remain 18m 50s) Loss: 0.1424(0.2039) 
+Epoch: [2][700/1564] Elapsed 13m 44s (remain 16m 54s) Loss: 0.5076(0.2025) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 14s) Loss: 0.2621(0.2621) 
+EVAL: [100/196] Elapsed 0m 49s (remain 0m 46s) Loss: 0.0494(0.1933) 
+EVAL: [195/196] Elapsed 1m 37s (remain 0m 0s) Loss: 0.1005(0.2122) 
+Epoch 2 Step 780 - avg_train_loss: 0.2075  avg_val_loss: 0.2143
+Epoch 2 Step 780 - Score: 0.4624
+Epoch 2 Step 780 - Save Best Score: 0.4624 Model
+Epoch: [2][800/1564] Elapsed 17m 28s (remain 16m 38s) Loss: 0.0267(0.2041) 
+Epoch: [2][900/1564] Elapsed 19m 24s (remain 14m 17s) Loss: 0.0469(0.2021) 
+Epoch: [2][1000/1564] Elapsed 21m 22s (remain 12m 1s) Loss: 0.2716(0.1998) 
+Epoch: [2][1100/1564] Elapsed 23m 21s (remain 9m 49s) Loss: 0.1908(0.1992) 
+Epoch: [2][1200/1564] Elapsed 25m 19s (remain 7m 39s) Loss: 0.4437(0.2024) 
+Epoch: [2][1300/1564] Elapsed 27m 17s (remain 5m 31s) Loss: 0.2197(0.2018) 
+Epoch: [2][1400/1564] Elapsed 29m 15s (remain 3m 24s) Loss: 0.2174(0.2000) 
+Epoch: [2][1500/1564] Elapsed 31m 13s (remain 1m 18s) Loss: 0.2519(0.2001) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.2436(0.2436) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 45s) Loss: 0.1021(0.1939) 
+EVAL: [195/196] Elapsed 1m 40s (remain 0m 0s) Loss: 0.1006(0.2207) 
+Epoch 2 Step 1560 - avg_train_loss: 0.2020  avg_val_loss: 0.2241
+Epoch 2 Step 1560 - Score: 0.4714
+Epoch: [2][1563/1564] Elapsed 34m 7s (remain 0m 0s) Loss: 0.0727(0.1996) 
+Epoch 2 - avg_train_loss: 0.2019  avg_val_loss: 0.2241  time: 2048s
+Epoch 2 - Score: 0.4714
+Epoch: [3][0/1564] Elapsed 0m 1s (remain 29m 7s) Loss: 0.3111(0.3111) 
+Epoch: [3][100/1564] Elapsed 1m 58s (remain 28m 29s) Loss: 0.2167(0.1808) 
+Epoch: [3][200/1564] Elapsed 3m 54s (remain 26m 29s) Loss: 0.2162(0.1773) 
+Epoch: [3][300/1564] Elapsed 5m 51s (remain 24m 36s) Loss: 0.3973(0.1757) 
+Epoch: [3][400/1564] Elapsed 7m 50s (remain 22m 45s) Loss: 0.4633(0.1742) 
+Epoch: [3][500/1564] Elapsed 9m 50s (remain 20m 53s) Loss: 0.1979(0.1699) 
+Epoch: [3][600/1564] Elapsed 11m 49s (remain 18m 57s) Loss: 0.1584(0.1667) 
+Epoch: [3][700/1564] Elapsed 13m 46s (remain 16m 58s) Loss: 0.3725(0.1657) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.2655(0.2655) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 43s) Loss: 0.0523(0.1832) 
+EVAL: [195/196] Elapsed 1m 36s (remain 0m 0s) Loss: 0.0993(0.2046) 
+Epoch 3 Step 780 - avg_train_loss: 0.1672  avg_val_loss: 0.2079
+Epoch 3 Step 780 - Score: 0.4554
+Epoch 3 Step 780 - Save Best Score: 0.4554 Model
+Epoch: [3][800/1564] Elapsed 17m 36s (remain 16m 46s) Loss: 0.0219(0.1660) 
+Epoch: [3][900/1564] Elapsed 19m 34s (remain 14m 23s) Loss: 0.0343(0.1636) 
+Epoch: [3][1000/1564] Elapsed 21m 30s (remain 12m 5s) Loss: 0.2646(0.1613) 
+Epoch: [3][1100/1564] Elapsed 23m 29s (remain 9m 52s) Loss: 0.1138(0.1595) 
+Epoch: [3][1200/1564] Elapsed 25m 30s (remain 7m 42s) Loss: 0.2168(0.1613) 
+Epoch: [3][1300/1564] Elapsed 27m 31s (remain 5m 33s) Loss: 0.2140(0.1600) 
+Epoch: [3][1400/1564] Elapsed 29m 26s (remain 3m 25s) Loss: 0.2138(0.1582) 
+Epoch: [3][1500/1564] Elapsed 31m 21s (remain 1m 18s) Loss: 0.1086(0.1572) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 10s) Loss: 0.2146(0.2146) 
+EVAL: [100/196] Elapsed 0m 50s (remain 0m 47s) Loss: 0.1137(0.1843) 
+EVAL: [195/196] Elapsed 1m 41s (remain 0m 0s) Loss: 0.0819(0.2163) 
+Epoch 3 Step 1560 - avg_train_loss: 0.1577  avg_val_loss: 0.2193
+Epoch 3 Step 1560 - Score: 0.4669
+Epoch: [3][1563/1564] Elapsed 34m 16s (remain 0m 0s) Loss: 0.0652(0.1566) 
+Epoch 3 - avg_train_loss: 0.1576  avg_val_loss: 0.2193  time: 2056s
+Epoch 3 - Score: 0.4669
+Epoch: [4][0/1564] Elapsed 0m 1s (remain 36m 0s) Loss: 0.3686(0.3686) 
+Epoch: [4][100/1564] Elapsed 1m 56s (remain 28m 8s) Loss: 0.2098(0.1371) 
+Epoch: [4][200/1564] Elapsed 3m 57s (remain 26m 47s) Loss: 0.2091(0.1318) 
+Epoch: [4][300/1564] Elapsed 5m 54s (remain 24m 47s) Loss: 0.2814(0.1322) 
+Epoch: [4][400/1564] Elapsed 7m 52s (remain 22m 50s) Loss: 0.3525(0.1305) 
+Epoch: [4][500/1564] Elapsed 9m 49s (remain 20m 51s) Loss: 0.1757(0.1282) 
+Epoch: [4][600/1564] Elapsed 11m 49s (remain 18m 57s) Loss: 0.1243(0.1258) 
+Epoch: [4][700/1564] Elapsed 13m 49s (remain 17m 0s) Loss: 0.0871(0.1255) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 13s) Loss: 0.2061(0.2061) 
+EVAL: [100/196] Elapsed 0m 48s (remain 0m 45s) Loss: 0.0932(0.1829) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.1069(0.2081) 
+Epoch 4 Step 780 - avg_train_loss: 0.1255  avg_val_loss: 0.2129
+Epoch 4 Step 780 - Score: 0.4605
+Epoch: [4][800/1564] Elapsed 17m 27s (remain 16m 37s) Loss: 0.0139(0.1250) 
+Epoch: [4][900/1564] Elapsed 19m 24s (remain 14m 16s) Loss: 0.0453(0.1226) 
+Epoch: [4][1000/1564] Elapsed 21m 23s (remain 12m 1s) Loss: 0.2330(0.1202) 
+Epoch: [4][1100/1564] Elapsed 23m 21s (remain 9m 49s) Loss: 0.1408(0.1200) 
+Epoch: [4][1200/1564] Elapsed 25m 19s (remain 7m 39s) Loss: 0.1162(0.1264) 
+Epoch: [4][1300/1564] Elapsed 27m 15s (remain 5m 30s) Loss: 0.1975(0.1259) 
+Epoch: [4][1400/1564] Elapsed 29m 15s (remain 3m 24s) Loss: 0.1630(0.1250) 
+Epoch: [4][1500/1564] Elapsed 31m 12s (remain 1m 18s) Loss: 0.0874(0.1245) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 13s) Loss: 0.1882(0.1882) 
+EVAL: [100/196] Elapsed 0m 43s (remain 0m 40s) Loss: 0.0816(0.1833) 
+EVAL: [195/196] Elapsed 1m 33s (remain 0m 0s) Loss: 0.1137(0.2084) 
+Epoch 4 Step 1560 - avg_train_loss: 0.1235  avg_val_loss: 0.2131
+Epoch 4 Step 1560 - Score: 0.4608
+Epoch: [4][1563/1564] Elapsed 34m 6s (remain 0m 0s) Loss: 0.0737(0.1242) 
+Epoch 4 - avg_train_loss: 0.1235  avg_val_loss: 0.2131  time: 2047s
+Epoch 4 - Score: 0.4608
+========== fold: 0 result ==========
+Score: 0.4554
+Running basic DDP example on rank 0.
+Running basic DDP example on rank 1.
+-------------fold:1 training-------------
+Epoch: [1][0/1564] Elapsed 0m 1s (remain 45m 40s) Loss: 10.5859(10.5859) 
+Epoch: [1][100/1564] Elapsed 1m 59s (remain 28m 50s) Loss: 1.3033(2.0033) 
+Epoch: [1][200/1564] Elapsed 3m 57s (remain 26m 52s) Loss: 0.3471(1.1821) 
+Epoch: [1][300/1564] Elapsed 5m 54s (remain 24m 49s) Loss: 0.5437(0.8913) 
+Epoch: [1][400/1564] Elapsed 7m 55s (remain 22m 58s) Loss: 0.4199(0.7472) 
+Epoch: [1][500/1564] Elapsed 9m 56s (remain 21m 4s) Loss: 0.2065(0.6506) 
+Epoch: [1][600/1564] Elapsed 11m 52s (remain 19m 2s) Loss: 0.2481(0.5826) 
+Epoch: [1][700/1564] Elapsed 13m 51s (remain 17m 3s) Loss: 0.0663(0.5343) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 16s) Loss: 0.1713(0.1713) 
+EVAL: [100/196] Elapsed 0m 43s (remain 0m 40s) Loss: 0.4647(0.1988) 
+EVAL: [195/196] Elapsed 1m 31s (remain 0m 0s) Loss: 0.1255(0.2182) 
+Epoch 1 Step 780 - avg_train_loss: 0.4936  avg_val_loss: 0.2222
+Epoch 1 Step 780 - Score: 0.4710
+Epoch 1 Step 780 - Save Best Score: 0.4710 Model
+Epoch: [1][800/1564] Elapsed 17m 28s (remain 16m 38s) Loss: 0.0989(0.5023) 
+Epoch: [1][900/1564] Elapsed 19m 24s (remain 14m 17s) Loss: 0.2922(0.4723) 
+Epoch: [1][1000/1564] Elapsed 21m 21s (remain 12m 0s) Loss: 0.3292(0.4526) 
+Epoch: [1][1100/1564] Elapsed 23m 19s (remain 9m 48s) Loss: 0.3221(0.4321) 
+Epoch: [1][1200/1564] Elapsed 25m 20s (remain 7m 39s) Loss: 0.2841(0.4155) 
+Epoch: [1][1300/1564] Elapsed 27m 18s (remain 5m 31s) Loss: 0.0507(0.4000) 
+Epoch: [1][1400/1564] Elapsed 29m 16s (remain 3m 24s) Loss: 0.2040(0.3874) 
+Epoch: [1][1500/1564] Elapsed 31m 16s (remain 1m 18s) Loss: 0.0994(0.3770) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 11s) Loss: 0.1217(0.1217) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.6699(0.2302) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.1338(0.2435) 
+Epoch 1 Step 1560 - avg_train_loss: 0.3639  avg_val_loss: 0.2440
+Epoch 1 Step 1560 - Score: 0.4938
+Epoch: [1][1563/1564] Elapsed 34m 5s (remain 0m 0s) Loss: 0.2575(0.3697) 
+Epoch 1 - avg_train_loss: 0.3635  avg_val_loss: 0.2440  time: 2046s
+Epoch 1 - Score: 0.4938
+Epoch: [2][0/1564] Elapsed 0m 1s (remain 28m 12s) Loss: 0.0742(0.0742) 
+Epoch: [2][100/1564] Elapsed 1m 59s (remain 28m 55s) Loss: 0.4248(0.2300) 
+Epoch: [2][200/1564] Elapsed 3m 58s (remain 26m 58s) Loss: 0.2960(0.2245) 
+Epoch: [2][300/1564] Elapsed 5m 55s (remain 24m 51s) Loss: 0.2550(0.2182) 
+Epoch: [2][400/1564] Elapsed 7m 54s (remain 22m 55s) Loss: 0.3297(0.2170) 
+Epoch: [2][500/1564] Elapsed 9m 53s (remain 20m 58s) Loss: 0.2994(0.2171) 
+Epoch: [2][600/1564] Elapsed 11m 49s (remain 18m 56s) Loss: 0.1865(0.2149) 
+Epoch: [2][700/1564] Elapsed 13m 46s (remain 16m 57s) Loss: 0.0830(0.2129) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.1473(0.1473) 
+EVAL: [100/196] Elapsed 0m 43s (remain 0m 41s) Loss: 0.6145(0.2101) 
+EVAL: [195/196] Elapsed 1m 34s (remain 0m 0s) Loss: 0.1070(0.2262) 
+Epoch 2 Step 780 - avg_train_loss: 0.2094  avg_val_loss: 0.2268
+Epoch 2 Step 780 - Score: 0.4758
+Epoch: [2][800/1564] Elapsed 17m 19s (remain 16m 29s) Loss: 0.0827(0.2143) 
+Epoch: [2][900/1564] Elapsed 19m 17s (remain 14m 11s) Loss: 0.2264(0.2117) 
+Epoch: [2][1000/1564] Elapsed 21m 13s (remain 11m 56s) Loss: 0.2459(0.2132) 
+Epoch: [2][1100/1564] Elapsed 23m 11s (remain 9m 45s) Loss: 0.4723(0.2117) 
+Epoch: [2][1200/1564] Elapsed 25m 10s (remain 7m 36s) Loss: 0.2569(0.2096) 
+Epoch: [2][1300/1564] Elapsed 27m 9s (remain 5m 29s) Loss: 0.0505(0.2066) 
+Epoch: [2][1400/1564] Elapsed 29m 7s (remain 3m 23s) Loss: 0.2836(0.2049) 
+Epoch: [2][1500/1564] Elapsed 31m 6s (remain 1m 18s) Loss: 0.0880(0.2043) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 10s) Loss: 0.1081(0.1081) 
+EVAL: [100/196] Elapsed 0m 45s (remain 0m 42s) Loss: 0.7931(0.2623) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.1189(0.2704) 
+Epoch 2 Step 1560 - avg_train_loss: 0.2008  avg_val_loss: 0.2667
+Epoch 2 Step 1560 - Score: 0.5164
+Epoch: [2][1563/1564] Elapsed 33m 59s (remain 0m 0s) Loss: 0.2622(0.2024) 
+Epoch 2 - avg_train_loss: 0.2006  avg_val_loss: 0.2667  time: 2039s
+Epoch 2 - Score: 0.5164
+Epoch: [3][0/1564] Elapsed 0m 0s (remain 23m 22s) Loss: 0.0716(0.0716) 
+Epoch: [3][100/1564] Elapsed 2m 1s (remain 29m 14s) Loss: 0.2688(0.1840) 
+Epoch: [3][200/1564] Elapsed 3m 57s (remain 26m 50s) Loss: 0.2484(0.1770) 
+Epoch: [3][300/1564] Elapsed 5m 55s (remain 24m 51s) Loss: 0.1413(0.1731) 
+Epoch: [3][400/1564] Elapsed 7m 52s (remain 22m 51s) Loss: 0.4100(0.1746) 
+Epoch: [3][500/1564] Elapsed 9m 50s (remain 20m 52s) Loss: 0.3075(0.1749) 
+Epoch: [3][600/1564] Elapsed 11m 47s (remain 18m 54s) Loss: 0.1366(0.1728) 
+Epoch: [3][700/1564] Elapsed 13m 46s (remain 16m 58s) Loss: 0.0742(0.1706) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.1263(0.1263) 
+EVAL: [100/196] Elapsed 0m 42s (remain 0m 39s) Loss: 0.7649(0.2436) 
+EVAL: [195/196] Elapsed 1m 31s (remain 0m 0s) Loss: 0.1044(0.2576) 
+Epoch 3 Step 780 - avg_train_loss: 0.1667  avg_val_loss: 0.2533
+Epoch 3 Step 780 - Score: 0.5030
+Epoch: [3][800/1564] Elapsed 17m 21s (remain 16m 31s) Loss: 0.0866(0.1701) 
+Epoch: [3][900/1564] Elapsed 19m 20s (remain 14m 13s) Loss: 0.1537(0.1672) 
+Epoch: [3][1000/1564] Elapsed 21m 17s (remain 11m 58s) Loss: 0.1591(0.1671) 
+Epoch: [3][1100/1564] Elapsed 23m 14s (remain 9m 46s) Loss: 0.4195(0.1649) 
+Epoch: [3][1200/1564] Elapsed 25m 11s (remain 7m 36s) Loss: 0.2221(0.1625) 
+Epoch: [3][1300/1564] Elapsed 27m 10s (remain 5m 29s) Loss: 0.0509(0.1603) 
+Epoch: [3][1400/1564] Elapsed 29m 8s (remain 3m 23s) Loss: 0.1297(0.1593) 
+Epoch: [3][1500/1564] Elapsed 31m 7s (remain 1m 18s) Loss: 0.0757(0.1587) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.1189(0.1189) 
+EVAL: [100/196] Elapsed 0m 44s (remain 0m 42s) Loss: 0.9178(0.2870) 
+EVAL: [195/196] Elapsed 1m 35s (remain 0m 0s) Loss: 0.1096(0.2920) 
+Epoch 3 Step 1560 - avg_train_loss: 0.1555  avg_val_loss: 0.2858
+Epoch 3 Step 1560 - Score: 0.5342
+Epoch: [3][1563/1564] Elapsed 33m 57s (remain 0m 0s) Loss: 0.2326(0.1574) 
+Epoch 3 - avg_train_loss: 0.1554  avg_val_loss: 0.2858  time: 2038s
+Epoch 3 - Score: 0.5342
+Epoch: [4][0/1564] Elapsed 0m 1s (remain 30m 10s) Loss: 0.0786(0.0786) 
+Epoch: [4][100/1564] Elapsed 2m 0s (remain 29m 7s) Loss: 0.0828(0.1251) 
+Epoch: [4][200/1564] Elapsed 3m 58s (remain 27m 0s) Loss: 0.2345(0.1250) 
+Epoch: [4][300/1564] Elapsed 5m 57s (remain 25m 1s) Loss: 0.1877(0.1231) 
+Epoch: [4][400/1564] Elapsed 7m 57s (remain 23m 3s) Loss: 0.2294(0.1262) 
+Epoch: [4][500/1564] Elapsed 9m 56s (remain 21m 6s) Loss: 0.1412(0.1296) 
+Epoch: [4][600/1564] Elapsed 11m 55s (remain 19m 6s) Loss: 0.1362(0.1272) 
+Epoch: [4][700/1564] Elapsed 13m 51s (remain 17m 3s) Loss: 0.0658(0.1268) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1461(0.1461) 
+EVAL: [100/196] Elapsed 0m 48s (remain 0m 45s) Loss: 1.0052(0.3436) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.1536(0.3564) 
+Epoch 4 Step 780 - avg_train_loss: 0.1242  avg_val_loss: 0.3465
+Epoch 4 Step 780 - Score: 0.5878
+Epoch: [4][800/1564] Elapsed 17m 29s (remain 16m 39s) Loss: 0.1070(0.1263) 
+Epoch: [4][900/1564] Elapsed 19m 27s (remain 14m 19s) Loss: 0.0274(0.1249) 
+Epoch: [4][1000/1564] Elapsed 21m 25s (remain 12m 2s) Loss: 0.0734(0.1238) 
+Epoch: [4][1100/1564] Elapsed 23m 26s (remain 9m 51s) Loss: 0.2426(0.1231) 
+Epoch: [4][1200/1564] Elapsed 25m 26s (remain 7m 41s) Loss: 0.1996(0.1223) 
+Epoch: [4][1300/1564] Elapsed 27m 23s (remain 5m 32s) Loss: 0.0202(0.1213) 
+Epoch: [4][1400/1564] Elapsed 29m 21s (remain 3m 24s) Loss: 0.2234(0.1209) 
+Epoch: [4][1500/1564] Elapsed 31m 20s (remain 1m 18s) Loss: 0.0667(0.1209) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 13s) Loss: 0.1357(0.1357) 
+EVAL: [100/196] Elapsed 0m 49s (remain 0m 46s) Loss: 0.7218(0.2333) 
+EVAL: [195/196] Elapsed 1m 40s (remain 0m 0s) Loss: 0.1010(0.2472) 
+Epoch 4 Step 1560 - avg_train_loss: 0.1186  avg_val_loss: 0.2454
+Epoch 4 Step 1560 - Score: 0.4947
+Epoch: [4][1563/1564] Elapsed 34m 14s (remain 0m 0s) Loss: 0.1804(0.1204) 
+Epoch 4 - avg_train_loss: 0.1186  avg_val_loss: 0.2454  time: 2055s
+Epoch 4 - Score: 0.4947
+========== fold: 1 result ==========
+Score: 0.4710
+Running basic DDP example on rank 1.
+Running basic DDP example on rank 0.
+-------------fold:2 training-------------
+Epoch: [1][0/1564] Elapsed 0m 1s (remain 51m 13s) Loss: 10.1293(10.1293) 
+Epoch: [1][100/1564] Elapsed 1m 58s (remain 28m 31s) Loss: 0.4972(1.8828) 
+Epoch: [1][200/1564] Elapsed 3m 58s (remain 26m 59s) Loss: 0.5222(1.1194) 
+Epoch: [1][300/1564] Elapsed 5m 57s (remain 24m 57s) Loss: 0.2290(0.8354) 
+Epoch: [1][400/1564] Elapsed 7m 54s (remain 22m 56s) Loss: 0.0865(0.6871) 
+Epoch: [1][500/1564] Elapsed 9m 49s (remain 20m 51s) Loss: 0.1210(0.5995) 
+Epoch: [1][600/1564] Elapsed 11m 48s (remain 18m 54s) Loss: 0.1275(0.5422) 
+Epoch: [1][700/1564] Elapsed 13m 47s (remain 16m 59s) Loss: 0.2274(0.4985) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.2286(0.2286) 
+EVAL: [100/196] Elapsed 0m 49s (remain 0m 46s) Loss: 0.1183(0.2093) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.1776(0.2383) 
+Epoch 1 Step 780 - avg_train_loss: 0.4744  avg_val_loss: 0.2392
+Epoch 1 Step 780 - Score: 0.4876
+Epoch 1 Step 780 - Save Best Score: 0.4876 Model
+Epoch: [1][800/1564] Elapsed 17m 26s (remain 16m 36s) Loss: 0.1932(0.4629) 
+Epoch: [1][900/1564] Elapsed 19m 25s (remain 14m 17s) Loss: 0.2717(0.4403) 
+Epoch: [1][1000/1564] Elapsed 21m 19s (remain 11m 59s) Loss: 0.0545(0.4198) 
+Epoch: [1][1100/1564] Elapsed 23m 18s (remain 9m 47s) Loss: 0.2477(0.4051) 
+Epoch: [1][1200/1564] Elapsed 25m 19s (remain 7m 39s) Loss: 0.2581(0.3893) 
+Epoch: [1][1300/1564] Elapsed 27m 16s (remain 5m 30s) Loss: 0.4211(0.3790) 
+Epoch: [1][1400/1564] Elapsed 29m 14s (remain 3m 24s) Loss: 0.1227(0.3682) 
+Epoch: [1][1500/1564] Elapsed 31m 8s (remain 1m 18s) Loss: 0.1799(0.3585) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.2267(0.2267) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 45s) Loss: 0.1176(0.2025) 
+EVAL: [195/196] Elapsed 1m 42s (remain 0m 0s) Loss: 0.2309(0.2331) 
+Epoch 1 Step 1560 - avg_train_loss: 0.3565  avg_val_loss: 0.2355
+Epoch 1 Step 1560 - Score: 0.4847
+Epoch 1 Step 1560 - Save Best Score: 0.4847 Model
+Epoch: [1][1563/1564] Elapsed 34m 14s (remain 0m 0s) Loss: 0.1778(0.3543) 
+Epoch 1 - avg_train_loss: 0.3561  avg_val_loss: 0.2355  time: 2054s
+Epoch 1 - Score: 0.4847
+Epoch: [2][0/1564] Elapsed 0m 1s (remain 27m 55s) Loss: 0.0734(0.0734) 
+Epoch: [2][100/1564] Elapsed 1m 57s (remain 28m 16s) Loss: 0.4489(0.2205) 
+Epoch: [2][200/1564] Elapsed 3m 55s (remain 26m 38s) Loss: 0.1481(0.2371) 
+Epoch: [2][300/1564] Elapsed 5m 54s (remain 24m 47s) Loss: 0.2392(0.2281) 
+Epoch: [2][400/1564] Elapsed 7m 51s (remain 22m 48s) Loss: 0.0974(0.2232) 
+Epoch: [2][500/1564] Elapsed 9m 49s (remain 20m 50s) Loss: 0.0916(0.2169) 
+Epoch: [2][600/1564] Elapsed 11m 50s (remain 18m 58s) Loss: 0.0982(0.2177) 
+Epoch: [2][700/1564] Elapsed 13m 50s (remain 17m 2s) Loss: 0.2137(0.2157) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 10s) Loss: 0.2351(0.2351) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 44s) Loss: 0.1007(0.1950) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.1551(0.2186) 
+Epoch 2 Step 780 - avg_train_loss: 0.2108  avg_val_loss: 0.2167
+Epoch 2 Step 780 - Score: 0.4646
+Epoch 2 Step 780 - Save Best Score: 0.4646 Model
+Epoch: [2][800/1564] Elapsed 17m 39s (remain 16m 49s) Loss: 0.1611(0.2118) 
+Epoch: [2][900/1564] Elapsed 19m 36s (remain 14m 26s) Loss: 0.2902(0.2102) 
+Epoch: [2][1000/1564] Elapsed 21m 34s (remain 12m 7s) Loss: 0.0432(0.2088) 
+Epoch: [2][1100/1564] Elapsed 23m 33s (remain 9m 54s) Loss: 0.2741(0.2098) 
+Epoch: [2][1200/1564] Elapsed 25m 31s (remain 7m 42s) Loss: 0.2703(0.2085) 
+Epoch: [2][1300/1564] Elapsed 27m 29s (remain 5m 33s) Loss: 0.2953(0.2081) 
+Epoch: [2][1400/1564] Elapsed 29m 26s (remain 3m 25s) Loss: 0.0661(0.2068) 
+Epoch: [2][1500/1564] Elapsed 31m 22s (remain 1m 19s) Loss: 0.1310(0.2053) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 10s) Loss: 0.1676(0.1676) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 43s) Loss: 0.1394(0.2075) 
+EVAL: [195/196] Elapsed 1m 36s (remain 0m 0s) Loss: 0.2320(0.2356) 
+Epoch 2 Step 1560 - avg_train_loss: 0.2034  avg_val_loss: 0.2358
+Epoch 2 Step 1560 - Score: 0.4852
+Epoch: [2][1563/1564] Elapsed 34m 13s (remain 0m 0s) Loss: 0.1858(0.2054) 
+Epoch 2 - avg_train_loss: 0.2033  avg_val_loss: 0.2358  time: 2054s
+Epoch 2 - Score: 0.4852
+Epoch: [3][0/1564] Elapsed 0m 1s (remain 30m 7s) Loss: 0.0724(0.0724) 
+Epoch: [3][100/1564] Elapsed 1m 55s (remain 27m 59s) Loss: 0.2139(0.1780) 
+Epoch: [3][200/1564] Elapsed 3m 55s (remain 26m 38s) Loss: 0.1049(0.1912) 
+Epoch: [3][300/1564] Elapsed 5m 51s (remain 24m 36s) Loss: 0.1118(0.1844) 
+Epoch: [3][400/1564] Elapsed 7m 50s (remain 22m 45s) Loss: 0.1060(0.1812) 
+Epoch: [3][500/1564] Elapsed 9m 47s (remain 20m 45s) Loss: 0.1040(0.1759) 
+Epoch: [3][600/1564] Elapsed 11m 47s (remain 18m 53s) Loss: 0.1032(0.1776) 
+Epoch: [3][700/1564] Elapsed 13m 48s (remain 16m 59s) Loss: 0.2112(0.1758) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.2157(0.2157) 
+EVAL: [100/196] Elapsed 0m 48s (remain 0m 45s) Loss: 0.0954(0.1971) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.1588(0.2179) 
+Epoch 3 Step 780 - avg_train_loss: 0.1718  avg_val_loss: 0.2159
+Epoch 3 Step 780 - Score: 0.4638
+Epoch 3 Step 780 - Save Best Score: 0.4638 Model
+Epoch: [3][800/1564] Elapsed 17m 32s (remain 16m 42s) Loss: 0.1292(0.1722) 
+Epoch: [3][900/1564] Elapsed 19m 29s (remain 14m 20s) Loss: 0.2448(0.1695) 
+Epoch: [3][1000/1564] Elapsed 21m 27s (remain 12m 4s) Loss: 0.0473(0.1676) 
+Epoch: [3][1100/1564] Elapsed 23m 25s (remain 9m 51s) Loss: 0.1803(0.1674) 
+Epoch: [3][1200/1564] Elapsed 25m 27s (remain 7m 41s) Loss: 0.1641(0.1658) 
+Epoch: [3][1300/1564] Elapsed 27m 27s (remain 5m 33s) Loss: 0.1474(0.1642) 
+Epoch: [3][1400/1564] Elapsed 29m 24s (remain 3m 25s) Loss: 0.0412(0.1625) 
+Epoch: [3][1500/1564] Elapsed 31m 22s (remain 1m 19s) Loss: 0.0795(0.1604) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 12s) Loss: 0.1432(0.1432) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.1187(0.2183) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.2725(0.2442) 
+Epoch 3 Step 1560 - avg_train_loss: 0.1585  avg_val_loss: 0.2435
+Epoch 3 Step 1560 - Score: 0.4932
+Epoch: [3][1563/1564] Elapsed 34m 13s (remain 0m 0s) Loss: 0.1166(0.1601) 
+Epoch 3 - avg_train_loss: 0.1584  avg_val_loss: 0.2435  time: 2054s
+Epoch 3 - Score: 0.4932
+Epoch: [4][0/1564] Elapsed 0m 1s (remain 29m 1s) Loss: 0.0658(0.0658) 
+Epoch: [4][100/1564] Elapsed 1m 56s (remain 28m 10s) Loss: 0.0950(0.1296) 
+Epoch: [4][200/1564] Elapsed 3m 54s (remain 26m 29s) Loss: 0.0616(0.1353) 
+Epoch: [4][300/1564] Elapsed 5m 54s (remain 24m 48s) Loss: 0.1552(0.1330) 
+Epoch: [4][400/1564] Elapsed 7m 51s (remain 22m 47s) Loss: 0.1058(0.1302) 
+Epoch: [4][500/1564] Elapsed 9m 50s (remain 20m 52s) Loss: 0.1166(0.1266) 
+Epoch: [4][600/1564] Elapsed 11m 47s (remain 18m 52s) Loss: 0.1095(0.1300) 
+Epoch: [4][700/1564] Elapsed 13m 48s (remain 17m 0s) Loss: 0.1742(0.1296) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.2178(0.2178) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.0973(0.2024) 
+EVAL: [195/196] Elapsed 1m 37s (remain 0m 0s) Loss: 0.2149(0.2240) 
+Epoch 4 Step 780 - avg_train_loss: 0.1289  avg_val_loss: 0.2238
+Epoch 4 Step 780 - Score: 0.4723
+Epoch: [4][800/1564] Elapsed 17m 21s (remain 16m 32s) Loss: 0.1086(0.1275) 
+Epoch: [4][900/1564] Elapsed 19m 20s (remain 14m 13s) Loss: 0.2001(0.1269) 
+Epoch: [4][1000/1564] Elapsed 21m 16s (remain 11m 57s) Loss: 0.1561(0.1274) 
+Epoch: [4][1100/1564] Elapsed 23m 17s (remain 9m 47s) Loss: 0.0376(0.1288) 
+Epoch: [4][1200/1564] Elapsed 25m 17s (remain 7m 38s) Loss: 0.1497(0.1282) 
+Epoch: [4][1300/1564] Elapsed 27m 15s (remain 5m 30s) Loss: 0.1358(0.1284) 
+Epoch: [4][1400/1564] Elapsed 29m 13s (remain 3m 24s) Loss: 0.0219(0.1269) 
+Epoch: [4][1500/1564] Elapsed 31m 11s (remain 1m 18s) Loss: 0.2378(0.1253) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.1353(0.1353) 
+EVAL: [100/196] Elapsed 0m 48s (remain 0m 45s) Loss: 0.0923(0.2129) 
+EVAL: [195/196] Elapsed 1m 35s (remain 0m 0s) Loss: 0.3037(0.2382) 
+Epoch 4 Step 1560 - avg_train_loss: 0.1246  avg_val_loss: 0.2412
+Epoch 4 Step 1560 - Score: 0.4908
+Epoch: [4][1563/1564] Elapsed 34m 3s (remain 0m 0s) Loss: 0.0881(0.1252) 
+Epoch 4 - avg_train_loss: 0.1246  avg_val_loss: 0.2412  time: 2043s
+Epoch 4 - Score: 0.4908
+========== fold: 2 result ==========
+Score: 0.4638
+Running basic DDP example on rank 1.
+Running basic DDP example on rank 0.
+-------------fold:3 training-------------
+Epoch: [1][0/1564] Elapsed 0m 1s (remain 42m 18s) Loss: 10.9914(10.9914) 
+Epoch: [1][100/1564] Elapsed 1m 57s (remain 28m 18s) Loss: 0.2961(1.8674) 
+Epoch: [1][200/1564] Elapsed 3m 56s (remain 26m 41s) Loss: 0.0216(1.0904) 
+Epoch: [1][300/1564] Elapsed 5m 54s (remain 24m 47s) Loss: 0.1688(0.8195) 
+Epoch: [1][400/1564] Elapsed 7m 51s (remain 22m 48s) Loss: 0.2251(0.6785) 
+Epoch: [1][500/1564] Elapsed 9m 51s (remain 20m 54s) Loss: 0.5135(0.5887) 
+Epoch: [1][600/1564] Elapsed 11m 49s (remain 18m 57s) Loss: 0.0869(0.5257) 
+Epoch: [1][700/1564] Elapsed 13m 48s (remain 16m 59s) Loss: 0.3626(0.4824) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 7s) Loss: 0.1013(0.1013) 
+EVAL: [100/196] Elapsed 0m 49s (remain 0m 46s) Loss: 0.1441(0.2074) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.1559(0.2270) 
+Epoch 1 Step 780 - avg_train_loss: 0.4826  avg_val_loss: 0.2312
+Epoch 1 Step 780 - Score: 0.4798
+Epoch 1 Step 780 - Save Best Score: 0.4798 Model
+Epoch: [1][800/1564] Elapsed 17m 28s (remain 16m 38s) Loss: 0.5730(0.4537) 
+Epoch: [1][900/1564] Elapsed 19m 26s (remain 14m 18s) Loss: 0.0675(0.4300) 
+Epoch: [1][1000/1564] Elapsed 21m 22s (remain 12m 1s) Loss: 0.3262(0.4101) 
+Epoch: [1][1100/1564] Elapsed 23m 20s (remain 9m 48s) Loss: 0.2314(0.3957) 
+Epoch: [1][1200/1564] Elapsed 25m 20s (remain 7m 39s) Loss: 0.2015(0.3833) 
+Epoch: [1][1300/1564] Elapsed 27m 19s (remain 5m 31s) Loss: 0.1802(0.3709) 
+Epoch: [1][1400/1564] Elapsed 29m 16s (remain 3m 24s) Loss: 0.0340(0.3610) 
+Epoch: [1][1500/1564] Elapsed 31m 13s (remain 1m 18s) Loss: 0.5607(0.3546) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 11s) Loss: 0.0849(0.0849) 
+EVAL: [100/196] Elapsed 0m 45s (remain 0m 43s) Loss: 0.1399(0.2028) 
+EVAL: [195/196] Elapsed 1m 37s (remain 0m 0s) Loss: 0.1230(0.2071) 
+Epoch 1 Step 1560 - avg_train_loss: 0.3589  avg_val_loss: 0.2123
+Epoch 1 Step 1560 - Score: 0.4599
+Epoch 1 Step 1560 - Save Best Score: 0.4599 Model
+Epoch: [1][1563/1564] Elapsed 34m 15s (remain 0m 0s) Loss: 0.2696(0.3492) 
+Epoch 1 - avg_train_loss: 0.3587  avg_val_loss: 0.2123  time: 2055s
+Epoch 1 - Score: 0.4599
+Epoch: [2][0/1564] Elapsed 0m 0s (remain 25m 59s) Loss: 0.5550(0.5550) 
+Epoch: [2][100/1564] Elapsed 1m 55s (remain 27m 53s) Loss: 0.0726(0.2076) 
+Epoch: [2][200/1564] Elapsed 3m 55s (remain 26m 37s) Loss: 0.0461(0.2131) 
+Epoch: [2][300/1564] Elapsed 5m 55s (remain 24m 50s) Loss: 0.2121(0.2237) 
+Epoch: [2][400/1564] Elapsed 7m 52s (remain 22m 49s) Loss: 0.2690(0.2170) 
+Epoch: [2][500/1564] Elapsed 9m 47s (remain 20m 47s) Loss: 0.3646(0.2103) 
+Epoch: [2][600/1564] Elapsed 11m 48s (remain 18m 55s) Loss: 0.0657(0.2050) 
+Epoch: [2][700/1564] Elapsed 13m 48s (remain 17m 0s) Loss: 0.5919(0.2037) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1115(0.1115) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 43s) Loss: 0.1414(0.2081) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.1427(0.2154) 
+Epoch 2 Step 780 - avg_train_loss: 0.2085  avg_val_loss: 0.2206
+Epoch 2 Step 780 - Score: 0.4691
+Epoch: [2][800/1564] Elapsed 17m 28s (remain 16m 38s) Loss: 0.2890(0.2058) 
+Epoch: [2][900/1564] Elapsed 19m 25s (remain 14m 17s) Loss: 0.0756(0.2064) 
+Epoch: [2][1000/1564] Elapsed 21m 19s (remain 11m 59s) Loss: 0.3071(0.2052) 
+Epoch: [2][1100/1564] Elapsed 23m 18s (remain 9m 48s) Loss: 0.2679(0.2056) 
+Epoch: [2][1200/1564] Elapsed 25m 18s (remain 7m 38s) Loss: 0.1566(0.2051) 
+Epoch: [2][1300/1564] Elapsed 27m 17s (remain 5m 30s) Loss: 0.1321(0.2032) 
+Epoch: [2][1400/1564] Elapsed 29m 13s (remain 3m 24s) Loss: 0.0267(0.2028) 
+Epoch: [2][1500/1564] Elapsed 31m 12s (remain 1m 18s) Loss: 0.4165(0.2032) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.0853(0.0853) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.1266(0.1971) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.0895(0.2021) 
+Epoch 2 Step 1560 - avg_train_loss: 0.2027  avg_val_loss: 0.2093
+Epoch 2 Step 1560 - Score: 0.4567
+Epoch 2 Step 1560 - Save Best Score: 0.4567 Model
+Epoch: [2][1563/1564] Elapsed 34m 14s (remain 0m 0s) Loss: 0.2683(0.2024) 
+Epoch 2 - avg_train_loss: 0.2027  avg_val_loss: 0.2093  time: 2055s
+Epoch 2 - Score: 0.4567
+Epoch: [3][0/1564] Elapsed 0m 0s (remain 25m 44s) Loss: 0.5044(0.5044) 
+Epoch: [3][100/1564] Elapsed 1m 59s (remain 28m 56s) Loss: 0.0739(0.1801) 
+Epoch: [3][200/1564] Elapsed 3m 59s (remain 27m 4s) Loss: 0.0530(0.1830) 
+Epoch: [3][300/1564] Elapsed 5m 58s (remain 25m 2s) Loss: 0.1427(0.1897) 
+Epoch: [3][400/1564] Elapsed 7m 57s (remain 23m 5s) Loss: 0.2863(0.1838) 
+Epoch: [3][500/1564] Elapsed 9m 55s (remain 21m 3s) Loss: 0.2405(0.2137) 
+Epoch: [3][600/1564] Elapsed 11m 55s (remain 19m 7s) Loss: 0.0685(0.2059) 
+Epoch: [3][700/1564] Elapsed 13m 56s (remain 17m 9s) Loss: 0.7176(0.2034) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1971(0.1971) 
+EVAL: [100/196] Elapsed 0m 48s (remain 0m 45s) Loss: 0.1299(0.2082) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.1291(0.2153) 
+Epoch 3 Step 780 - avg_train_loss: 0.2157  avg_val_loss: 0.2187
+Epoch 3 Step 780 - Score: 0.4671
+Epoch: [3][800/1564] Elapsed 17m 28s (remain 16m 39s) Loss: 0.1843(0.2017) 
+Epoch: [3][900/1564] Elapsed 19m 26s (remain 14m 18s) Loss: 0.0713(0.1994) 
+Epoch: [3][1000/1564] Elapsed 21m 23s (remain 12m 2s) Loss: 0.2638(0.1952) 
+Epoch: [3][1100/1564] Elapsed 23m 25s (remain 9m 50s) Loss: 0.1695(0.1930) 
+Epoch: [3][1200/1564] Elapsed 25m 24s (remain 7m 40s) Loss: 0.1554(0.1900) 
+Epoch: [3][1300/1564] Elapsed 27m 22s (remain 5m 32s) Loss: 0.1227(0.1869) 
+Epoch: [3][1400/1564] Elapsed 29m 20s (remain 3m 24s) Loss: 0.0278(0.1848) 
+Epoch: [3][1500/1564] Elapsed 31m 18s (remain 1m 18s) Loss: 0.2485(0.1826) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1606(0.1606) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 43s) Loss: 0.1261(0.2153) 
+EVAL: [195/196] Elapsed 1m 36s (remain 0m 0s) Loss: 0.1061(0.2217) 
+Epoch 3 Step 1560 - avg_train_loss: 0.1874  avg_val_loss: 0.2314
+Epoch 3 Step 1560 - Score: 0.4800
+Epoch: [3][1563/1564] Elapsed 34m 13s (remain 0m 0s) Loss: 0.2160(0.1808) 
+Epoch 3 - avg_train_loss: 0.1873  avg_val_loss: 0.2314  time: 2053s
+Epoch 3 - Score: 0.4800
+Epoch: [4][0/1564] Elapsed 0m 0s (remain 23m 49s) Loss: 0.6670(0.6670) 
+Epoch: [4][100/1564] Elapsed 1m 57s (remain 28m 28s) Loss: 0.0789(0.1541) 
+Epoch: [4][200/1564] Elapsed 3m 58s (remain 26m 55s) Loss: 0.0510(0.1540) 
+Epoch: [4][300/1564] Elapsed 5m 56s (remain 24m 55s) Loss: 0.0935(0.1556) 
+Epoch: [4][400/1564] Elapsed 7m 51s (remain 22m 46s) Loss: 0.3782(0.1498) 
+Epoch: [4][500/1564] Elapsed 9m 47s (remain 20m 46s) Loss: 0.1361(0.1464) 
+Epoch: [4][600/1564] Elapsed 11m 48s (remain 18m 54s) Loss: 0.0480(0.1459) 
+Epoch: [4][700/1564] Elapsed 13m 50s (remain 17m 2s) Loss: 0.9304(0.1452) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1982(0.1982) 
+EVAL: [100/196] Elapsed 0m 46s (remain 0m 43s) Loss: 0.1137(0.2154) 
+EVAL: [195/196] Elapsed 1m 37s (remain 0m 0s) Loss: 0.1358(0.2219) 
+Epoch 4 Step 780 - avg_train_loss: 0.1448  avg_val_loss: 0.2274
+Epoch 4 Step 780 - Score: 0.4763
+Epoch: [4][800/1564] Elapsed 17m 24s (remain 16m 34s) Loss: 0.0821(0.1460) 
+Epoch: [4][900/1564] Elapsed 19m 22s (remain 14m 15s) Loss: 0.0599(0.1456) 
+Epoch: [4][1000/1564] Elapsed 21m 21s (remain 12m 0s) Loss: 0.2033(0.1442) 
+Epoch: [4][1100/1564] Elapsed 23m 16s (remain 9m 47s) Loss: 0.0827(0.1438) 
+Epoch: [4][1200/1564] Elapsed 25m 18s (remain 7m 38s) Loss: 0.1469(0.1418) 
+Epoch: [4][1300/1564] Elapsed 27m 16s (remain 5m 30s) Loss: 0.1188(0.1401) 
+Epoch: [4][1400/1564] Elapsed 29m 17s (remain 3m 24s) Loss: 0.0689(0.1394) 
+Epoch: [4][1500/1564] Elapsed 31m 15s (remain 1m 18s) Loss: 0.1518(0.1383) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 10s) Loss: 0.1938(0.1938) 
+EVAL: [100/196] Elapsed 0m 44s (remain 0m 41s) Loss: 0.1153(0.2419) 
+EVAL: [195/196] Elapsed 1m 36s (remain 0m 0s) Loss: 0.1576(0.2516) 
+Epoch 4 Step 1560 - avg_train_loss: 0.1359  avg_val_loss: 0.2649
+Epoch 4 Step 1560 - Score: 0.5131
+Epoch: [4][1563/1564] Elapsed 34m 6s (remain 0m 0s) Loss: 0.1314(0.1371) 
+Epoch 4 - avg_train_loss: 0.1359  avg_val_loss: 0.2649  time: 2047s
+Epoch 4 - Score: 0.5131
+========== fold: 3 result ==========
+Score: 0.4567
+Running basic DDP example on rank 0.
+Running basic DDP example on rank 1.
+-------------fold:4 training-------------
+Epoch: [1][0/1564] Elapsed 0m 1s (remain 43m 24s) Loss: 5.5568(5.5568) 
+Epoch: [1][100/1564] Elapsed 1m 58s (remain 28m 43s) Loss: 0.7830(1.9606) 
+Epoch: [1][200/1564] Elapsed 3m 54s (remain 26m 28s) Loss: 0.0624(1.1322) 
+Epoch: [1][300/1564] Elapsed 5m 52s (remain 24m 37s) Loss: 0.2168(0.8558) 
+Epoch: [1][400/1564] Elapsed 7m 50s (remain 22m 43s) Loss: 0.0962(0.7006) 
+Epoch: [1][500/1564] Elapsed 9m 46s (remain 20m 44s) Loss: 0.2890(0.6096) 
+Epoch: [1][600/1564] Elapsed 11m 45s (remain 18m 50s) Loss: 0.3268(0.5475) 
+Epoch: [1][700/1564] Elapsed 13m 43s (remain 16m 53s) Loss: 0.1128(0.5005) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.2212(0.2212) 
+EVAL: [100/196] Elapsed 0m 49s (remain 0m 46s) Loss: 0.2877(0.2249) 
+EVAL: [195/196] Elapsed 1m 40s (remain 0m 0s) Loss: 0.1395(0.2395) 
+Epoch 1 Step 780 - avg_train_loss: 0.4722  avg_val_loss: 0.2318
+Epoch 1 Step 780 - Score: 0.4810
+Epoch 1 Step 780 - Save Best Score: 0.4810 Model
+Epoch: [1][800/1564] Elapsed 17m 20s (remain 16m 31s) Loss: 0.2061(0.4727) 
+Epoch: [1][900/1564] Elapsed 19m 19s (remain 14m 13s) Loss: 0.0615(0.4505) 
+Epoch: [1][1000/1564] Elapsed 21m 18s (remain 11m 58s) Loss: 0.1757(0.4226) 
+Epoch: [1][1100/1564] Elapsed 23m 16s (remain 9m 47s) Loss: 0.1491(0.4062) 
+Epoch: [1][1200/1564] Elapsed 25m 14s (remain 7m 37s) Loss: 0.1508(0.3914) 
+Epoch: [1][1300/1564] Elapsed 27m 16s (remain 5m 30s) Loss: 0.0781(0.3796) 
+Epoch: [1][1400/1564] Elapsed 29m 14s (remain 3m 24s) Loss: 0.1642(0.3692) 
+Epoch: [1][1500/1564] Elapsed 31m 10s (remain 1m 18s) Loss: 0.1251(0.3616) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 14s) Loss: 0.3828(0.3828) 
+EVAL: [100/196] Elapsed 0m 51s (remain 0m 48s) Loss: 0.1852(0.2152) 
+EVAL: [195/196] Elapsed 1m 45s (remain 0m 0s) Loss: 0.1141(0.2338) 
+Epoch 1 Step 1560 - avg_train_loss: 0.3563  avg_val_loss: 0.2249
+Epoch 1 Step 1560 - Score: 0.4732
+Epoch 1 Step 1560 - Save Best Score: 0.4732 Model
+Epoch: [1][1563/1564] Elapsed 34m 18s (remain 0m 0s) Loss: 0.3492(0.3564) 
+Epoch 1 - avg_train_loss: 0.3560  avg_val_loss: 0.2249  time: 2059s
+Epoch 1 - Score: 0.4732
+Epoch: [2][0/1564] Elapsed 0m 1s (remain 36m 32s) Loss: 0.0686(0.0686) 
+Epoch: [2][100/1564] Elapsed 1m 59s (remain 28m 43s) Loss: 0.7409(0.2379) 
+Epoch: [2][200/1564] Elapsed 3m 57s (remain 26m 47s) Loss: 0.0655(0.2289) 
+Epoch: [2][300/1564] Elapsed 5m 54s (remain 24m 47s) Loss: 0.2383(0.2321) 
+Epoch: [2][400/1564] Elapsed 7m 53s (remain 22m 54s) Loss: 0.0849(0.2219) 
+Epoch: [2][500/1564] Elapsed 9m 49s (remain 20m 51s) Loss: 0.2219(0.2164) 
+Epoch: [2][600/1564] Elapsed 11m 48s (remain 18m 55s) Loss: 0.2954(0.2132) 
+Epoch: [2][700/1564] Elapsed 13m 49s (remain 17m 0s) Loss: 0.1245(0.2088) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1714(0.1714) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.3130(0.2194) 
+EVAL: [195/196] Elapsed 1m 36s (remain 0m 0s) Loss: 0.0813(0.2272) 
+Epoch 2 Step 780 - avg_train_loss: 0.2116  avg_val_loss: 0.2201
+Epoch 2 Step 780 - Score: 0.4684
+Epoch 2 Step 780 - Save Best Score: 0.4684 Model
+Epoch: [2][800/1564] Elapsed 17m 31s (remain 16m 41s) Loss: 0.1970(0.2095) 
+Epoch: [2][900/1564] Elapsed 19m 30s (remain 14m 21s) Loss: 0.0618(0.2107) 
+Epoch: [2][1000/1564] Elapsed 21m 29s (remain 12m 5s) Loss: 0.1410(0.2044) 
+Epoch: [2][1100/1564] Elapsed 23m 30s (remain 9m 53s) Loss: 0.1114(0.2042) 
+Epoch: [2][1200/1564] Elapsed 25m 31s (remain 7m 42s) Loss: 0.1087(0.2030) 
+Epoch: [2][1300/1564] Elapsed 27m 30s (remain 5m 33s) Loss: 0.0769(0.2024) 
+Epoch: [2][1400/1564] Elapsed 29m 30s (remain 3m 25s) Loss: 0.2007(0.2020) 
+Epoch: [2][1500/1564] Elapsed 31m 28s (remain 1m 19s) Loss: 0.1054(0.2019) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 8s) Loss: 0.4509(0.4509) 
+EVAL: [100/196] Elapsed 0m 48s (remain 0m 45s) Loss: 0.2229(0.2135) 
+EVAL: [195/196] Elapsed 1m 39s (remain 0m 0s) Loss: 0.1297(0.2300) 
+Epoch 2 Step 1560 - avg_train_loss: 0.2053  avg_val_loss: 0.2219
+Epoch 2 Step 1560 - Score: 0.4702
+Epoch: [2][1563/1564] Elapsed 34m 20s (remain 0m 0s) Loss: 0.4338(0.2022) 
+Epoch 2 - avg_train_loss: 0.2054  avg_val_loss: 0.2219  time: 2061s
+Epoch 2 - Score: 0.4702
+Epoch: [3][0/1564] Elapsed 0m 1s (remain 35m 9s) Loss: 0.0781(0.0781) 
+Epoch: [3][100/1564] Elapsed 1m 58s (remain 28m 31s) Loss: 0.6627(0.2083) 
+Epoch: [3][200/1564] Elapsed 3m 59s (remain 27m 4s) Loss: 0.0763(0.1910) 
+Epoch: [3][300/1564] Elapsed 5m 58s (remain 25m 4s) Loss: 0.2363(0.1946) 
+Epoch: [3][400/1564] Elapsed 7m 55s (remain 22m 59s) Loss: 0.0743(0.1866) 
+Epoch: [3][500/1564] Elapsed 9m 53s (remain 20m 59s) Loss: 0.2236(0.1821) 
+Epoch: [3][600/1564] Elapsed 11m 51s (remain 19m 0s) Loss: 0.1263(0.1789) 
+Epoch: [3][700/1564] Elapsed 13m 52s (remain 17m 5s) Loss: 0.0917(0.1749) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 7s) Loss: 0.1270(0.1270) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.2959(0.2237) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.0930(0.2296) 
+Epoch 3 Step 780 - avg_train_loss: 0.1762  avg_val_loss: 0.2232
+Epoch 3 Step 780 - Score: 0.4713
+Epoch: [3][800/1564] Elapsed 17m 29s (remain 16m 39s) Loss: 0.1892(0.1739) 
+Epoch: [3][900/1564] Elapsed 19m 28s (remain 14m 20s) Loss: 0.0588(0.1738) 
+Epoch: [3][1000/1564] Elapsed 21m 27s (remain 12m 4s) Loss: 0.1220(0.1692) 
+Epoch: [3][1100/1564] Elapsed 23m 26s (remain 9m 51s) Loss: 0.0804(0.1680) 
+Epoch: [3][1200/1564] Elapsed 25m 23s (remain 7m 40s) Loss: 0.0552(0.1658) 
+Epoch: [3][1300/1564] Elapsed 27m 22s (remain 5m 32s) Loss: 0.1020(0.1650) 
+Epoch: [3][1400/1564] Elapsed 29m 21s (remain 3m 24s) Loss: 0.1275(0.1643) 
+Epoch: [3][1500/1564] Elapsed 31m 15s (remain 1m 18s) Loss: 0.0800(0.1641) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.4228(0.4228) 
+EVAL: [100/196] Elapsed 0m 44s (remain 0m 41s) Loss: 0.3163(0.2208) 
+EVAL: [195/196] Elapsed 1m 37s (remain 0m 0s) Loss: 0.1794(0.2279) 
+Epoch 3 Step 1560 - avg_train_loss: 0.1661  avg_val_loss: 0.2239
+Epoch 3 Step 1560 - Score: 0.4726
+Epoch: [3][1563/1564] Elapsed 34m 6s (remain 0m 0s) Loss: 0.3512(0.1642) 
+Epoch 3 - avg_train_loss: 0.1662  avg_val_loss: 0.2239  time: 2047s
+Epoch 3 - Score: 0.4726
+Epoch: [4][0/1564] Elapsed 0m 0s (remain 25m 53s) Loss: 0.0949(0.0949) 
+Epoch: [4][100/1564] Elapsed 2m 2s (remain 29m 30s) Loss: 0.4400(0.1588) 
+Epoch: [4][200/1564] Elapsed 4m 2s (remain 27m 24s) Loss: 0.0868(0.1448) 
+Epoch: [4][300/1564] Elapsed 5m 59s (remain 25m 8s) Loss: 0.2146(0.1461) 
+Epoch: [4][400/1564] Elapsed 7m 59s (remain 23m 9s) Loss: 0.0725(0.1419) 
+Epoch: [4][500/1564] Elapsed 9m 57s (remain 21m 7s) Loss: 0.2748(0.1390) 
+Epoch: [4][600/1564] Elapsed 11m 55s (remain 19m 6s) Loss: 0.0366(0.1378) 
+Epoch: [4][700/1564] Elapsed 13m 55s (remain 17m 8s) Loss: 0.0888(0.1347) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 9s) Loss: 0.1293(0.1293) 
+EVAL: [100/196] Elapsed 0m 47s (remain 0m 44s) Loss: 0.2753(0.2301) 
+EVAL: [195/196] Elapsed 1m 38s (remain 0m 0s) Loss: 0.0562(0.2374) 
+Epoch 4 Step 780 - avg_train_loss: 0.1378  avg_val_loss: 0.2320
+Epoch 4 Step 780 - Score: 0.4803
+Epoch: [4][800/1564] Elapsed 17m 31s (remain 16m 41s) Loss: 0.1704(0.1357) 
+Epoch: [4][900/1564] Elapsed 19m 29s (remain 14m 20s) Loss: 0.0570(0.1344) 
+Epoch: [4][1000/1564] Elapsed 21m 27s (remain 12m 3s) Loss: 0.0906(0.1317) 
+Epoch: [4][1100/1564] Elapsed 23m 26s (remain 9m 51s) Loss: 0.0466(0.1313) 
+Epoch: [4][1200/1564] Elapsed 25m 28s (remain 7m 41s) Loss: 0.0322(0.1293) 
+Epoch: [4][1300/1564] Elapsed 27m 24s (remain 5m 32s) Loss: 0.0535(0.1289) 
+Epoch: [4][1400/1564] Elapsed 29m 22s (remain 3m 25s) Loss: 0.5514(0.1287) 
+Epoch: [4][1500/1564] Elapsed 31m 20s (remain 1m 18s) Loss: 0.0698(0.1291) 
+EVAL: [0/196] Elapsed 0m 0s (remain 0m 12s) Loss: 0.3415(0.3415) 
+EVAL: [100/196] Elapsed 0m 51s (remain 0m 48s) Loss: 0.2604(0.2156) 
+EVAL: [195/196] Elapsed 1m 44s (remain 0m 0s) Loss: 0.1972(0.2231) 
+Epoch 4 Step 1560 - avg_train_loss: 0.1317  avg_val_loss: 0.2201
+Epoch 4 Step 1560 - Score: 0.4685
+Epoch: [4][1563/1564] Elapsed 34m 18s (remain 0m 0s) Loss: 0.1977(0.1294) 
+Epoch 4 - avg_train_loss: 0.1317  avg_val_loss: 0.2201  time: 2059s
+Epoch 4 - Score: 0.4685
+========== fold: 4 result ==========
+Score: 0.4684
+========== CV ==========
+Score: 0.4633
