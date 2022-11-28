@@ -63,7 +63,7 @@ class CFG:
     target_size = len(targets)
     n_accumulate=1
     print_freq = 100
-    eval_freq = 190 # 390 # 780
+    eval_freq = 230 # 390 # 780
     scheduler = 'cosine'
     batch_size = 4 #1
     num_workers = 0
